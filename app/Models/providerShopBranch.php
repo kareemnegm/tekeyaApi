@@ -96,10 +96,22 @@ class providerShopBranch extends Model
                 ->having("distance", "<=", $distance)
                 ->orderby("distance", "asc")->get();
         } else {
-            return  providerShopBranch::with('shop')->select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"),'latitude','longitude')
+            return providerShopBranch::select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"), 'latitude', 'longitude')
                 ->having("distance", "<=", $distance)
                 ->orderby("distance", "asc")->get();
         }
+
+            //  $mapCollection = $shopBranch->map( function ( $value )
+            //     {
+            //         $value['shop']=$value->shop;
+            //         $value['distance']=$value->distance;
+            //         return $value;
+            //     });
+
+        // return  $mapCollection;
+
+
+        
     }
 
 

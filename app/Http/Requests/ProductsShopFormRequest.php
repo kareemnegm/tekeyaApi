@@ -26,7 +26,7 @@ class ProductsShopFormRequest extends BaseFormRequest
     {
         return [
             'shop_id' => 'required|exists:provider_shop_details,id',
-            'area_id'=>'nullable|exists:areas,id',
+            // 'area_id'=>'nullable|exists:areas,id',
             'category_id' => 'nullable|exists:categories,id',
             'collection_id' => ['nullable',Rule::exists('collections', 'id')->where('shop_id',request()->shop_id)  ],
 

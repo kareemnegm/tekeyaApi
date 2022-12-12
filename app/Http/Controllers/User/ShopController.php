@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductsShopFormRequest;
+use App\Http\Requests\User\NewShopsFormRequest;
 use App\Http\Requests\User\ShopCollectionsFromRequest;
 use App\Http\Requests\User\ShopIdFormRequest;
 use App\Http\Requests\User\SingleShopResource;
@@ -19,12 +20,14 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\providerShopBranch;
 use App\Models\ProviderShopDetails;
+use App\Traits\UserAreaTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Monolog\Handler\IFTTTHandler;
 
 class ShopController extends Controller
 {
+    use UserAreaTrait;
     /**
      * Undocumented variable
      *
@@ -48,9 +51,18 @@ class ShopController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function nearestShops(Request $request)
+    public function nearestShops(NewShopsFormRequest $request)
     {
-        $nearestShops = $this->shopRepository->nearestShops($request);
+
+        $data=$request->validated();
+        
+        $data= $this->userArea($data);
+
+        if(!isset($data['latitude']) && !isset($data['longitude'])){
+            return $this->errorResponseWithMessage('User not have any area location or lat and long',422);
+        }
+
+        $nearestShops = $this->shopRepository->nearestShops($data);
 
         return $this->paginateCollection(ShopsResource::collection($nearestShops), $request->limit, 'shops');
     }
@@ -61,9 +73,18 @@ class ShopController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function newShops(Request $request)
+    public function newShops(NewShopsFormRequest $request)
     {
-        $newShops = $this->shopRepository->newShops($request);
+
+        $data=$request->validated();
+        
+        $data= $this->userArea($data);
+
+        if(!isset($data['latitude']) && !isset($data['longitude'])){
+            return $this->errorResponseWithMessage('User not have any area location or lat and long',422);
+        }
+
+        $newShops = $this->shopRepository->newShops($data);
         return $this->paginateCollection(ShopsResource::collection($newShops), $request->limit, 'shops');
     }
 
@@ -73,9 +94,18 @@ class ShopController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function shopsProducts(Request $request)
+    public function shopsProducts(NewShopsFormRequest $request)
     {
-        $shopsProducts = $this->shopRepository->shopsProducts($request);
+
+        $data=$request->validated();
+        
+        $data= $this->userArea($data);
+
+        if(!isset($data['latitude']) && !isset($data['longitude'])){
+            return $this->errorResponseWithMessage('User not have any area location or lat and long',422);
+        }
+
+        $shopsProducts = $this->shopRepository->shopsProducts($data);
         return $this->paginateCollection(ShopsProductsResoruce::collection($shopsProducts), $request->limit, 'shops');
     }
 
@@ -100,8 +130,12 @@ class ShopController extends Controller
     public function getShopDetails(SingleShopResource $request)
     {
         $data=$request->validated();
-      
-         $data= $this->userArea($data);
+
+        $data= $this->userArea($data);
+
+        if(!isset($data['latitude']) && !isset($data['longitude'])){
+            return $this->errorResponseWithMessage('User not have any area location or lat and long',422);
+        }
 
         $shop = $this->shopRepository->getShopDetails($data);
 
@@ -132,19 +166,15 @@ class ShopController extends Controller
 
     public function relatedShops(Request $request,$productId)
     {
-        if (auth('user')->check()) {
-            $userLocation = auth('user')->user()->userLocation;
-            if ($userLocation) {
-                $request['latitude'] = $userLocation->latitude;
-                $request['longitude'] = $userLocation->longitude;
-            }
-        } elseif (isset($request->area_id) && !empty($request->area_id)) {
-            $area = Area::findOrFail($request->area_id);
-            $request['latitude'] = $area->latitude;
-            $request['longitude'] = $area->longitude;
+
+        $data=$request->validated();
+
+        $data= $this->userArea($data);
+
+        if(!isset($data['latitude']) && !isset($data['longitude'])){
+            return $this->errorResponseWithMessage('User not have any area location or lat and long',422);
         }
-
-
+        
         $shops = $this->shopRepository->relatedShops($request,$productId);
 
 
@@ -161,42 +191,50 @@ class ShopController extends Controller
     public function getShopCollections(ShopCollectionsFromRequest $request)
     {
         $data=$request->validated();
+
+        $data= $this->userArea($data);
+
+        if(!isset($data['latitude']) && !isset($data['longitude'])){
+            return $this->errorResponseWithMessage('User not have any area location or lat and long',422);
+        }
+        
+
         $products = $this->shopRepository->getShopCollections($data['shop_id']);
         return $this->paginateCollection(ShopCollectionsResource::collection($products), $request->limit, 'collections');
     }
 
-    /**
-     * Undocumented function
-     *
-     * @param [type] $date
-     * @return array
-     */
-    private function userArea($data){
+    // /**
+    //  * Undocumented function
+    //  *
+    //  * @param [type] $date
+    //  * @return array
+    //  */
+    // private function userArea($data){
 
-        if (auth('user')->check()) {
+    //     if (auth('user')->check()) {
 
-            $user = auth('user')->user();
+    //         $user = auth('user')->user();
     
-            if ($user->userLocation) {
-                    $data['latitude'] = $user->userLocation->latitude;
-                    $data['longitude'] = $user->userLocation->longitude;
-            }elseif(isset($user->area_id)) {
-                $area = Area::findOrFail($user->area_id);
-                $data['latitude'] = $area->latitude;
-                $data['longitude'] = $area->longitude;
+    //         if ($user->userLocation) {
+    //                 $data['latitude'] = $user->userLocation->latitude;
+    //                 $data['longitude'] = $user->userLocation->longitude;
+    //         }elseif(isset($user->area_id)) {
+    //             $area = Area::findOrFail($user->area_id);
+    //             $data['latitude'] = $area->latitude;
+    //             $data['longitude'] = $area->longitude;
     
     
-            }
-            if(!isset($data['latitude']) && !isset($data['longitude'])){
-                return $this->errorResponseWithMessage('User not have any area location or lat and long',422);
-            }
-        }else{
-            if(isset($data['area_id'])){
-                $area = Area::findOrFail($data['area_id']);
-                $data['latitude'] = $area->latitude;
-                $data['longitude'] = $area->longitude;
-            }
-        }
-        return $data;
-    }
+    //         }
+    //         if(!isset($data['latitude']) && !isset($data['longitude'])){
+    //             return $this->errorResponseWithMessage('User not have any area location or lat and long',422);
+    //         }
+    //     }else{
+    //         if(isset($data['area_id'])){
+    //             $area = Area::findOrFail($data['area_id']);
+    //             $data['latitude'] = $area->latitude;
+    //             $data['longitude'] = $area->longitude;
+    //         }
+    //     }
+    //     return $data;
+    // }
 }

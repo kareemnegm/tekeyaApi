@@ -22,9 +22,9 @@ class ShopRepository extends Controller implements ShopInrerface
     {
 
 
-        $latitude = 30.012537910528884;
-        $longitude = 31.290307442198323;
-        $q = providerShopBranch::ByDistance($latitude, $longitude);
+        // $latitude = 30.012537910528884;
+        // $longitude = 31.290307442198323;
+        $q = providerShopBranch::ByDistance($request['latitude'], $request['longitude']);
         return $q;
     }
 
@@ -36,9 +36,10 @@ class ShopRepository extends Controller implements ShopInrerface
      */
     public function newShops($request)
     {
-        $latitude = 30.012537910528884;
-        $longitude = 31.290307442198323;
-        $q = providerShopBranch::ByDistance($latitude, $longitude);
+        // $latitude = 30.012537910528884;
+        // $longitude = 31.290307442198323;
+        // dd($request);
+        $q = providerShopBranch::ByDistance($request['latitude'], $request['longitude']);
         return $q;
     }
 
@@ -51,15 +52,13 @@ class ShopRepository extends Controller implements ShopInrerface
     public function shopsProducts($request)
     {
 
-
-        $latitude = $request->latitude ? $request->latitude : 30.012537910528884;
-        $longitude = $request->longitude ? $request->longitude : 31.290307;
-
         if ($request->category_id) {
             $category = Category::findOrFail($request->category_id);
-            $q = providerShopBranch::ByDistance($latitude, $longitude, $category->shops->pluck('id'));
+
+            $q = providerShopBranch::ByDistance($request['latitude'], $category->shops->pluck('id'));
+
         } else {
-            $q = providerShopBranch::ByDistance($latitude, $longitude);
+            $q = providerShopBranch::ByDistance($request['latitude']);
         }
 
         return $q;
@@ -77,7 +76,7 @@ class ShopRepository extends Controller implements ShopInrerface
 
 
         $shop = ProviderShopDetails::findOrFail($request->shop_id);
-        $q = $shop->products();
+        $q = $shop->products()->where('is_published',1);
 
 
         if(isset($request->category_id)){
@@ -88,10 +87,10 @@ class ShopRepository extends Controller implements ShopInrerface
             $q->where('collection_id',$request->collection_id);
         }
 
-        $products = $q->orderBy('order', 'ASC')->get();
+        $shop = $q->orderBy('order', 'ASC')->get();
 
 
-        return $products;
+        return $shop;
     }
 
     /**
@@ -139,14 +138,7 @@ class ShopRepository extends Controller implements ShopInrerface
 
         $category = Category::findOrFail($product->category_id);
 
-
-
-        $latitude = $request->latitude ? $request->latitude : 30.012537910528884;
-        $longitude = $request->longitude ? $request->longitude : 31.290307;
-
-
-
-        $shops = providerShopBranch::DistanceBranches($latitude, $longitude, $category->shops->pluck('id'))->unique('shop_id');
+        $shops = providerShopBranch::DistanceBranches($request['latitude'], $request['longitude'], $category->shops->pluck('id'))->unique('shop_id');
 
 
         return $shops;
