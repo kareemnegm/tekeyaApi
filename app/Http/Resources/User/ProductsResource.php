@@ -17,15 +17,8 @@ class ProductsResource extends JsonResource
      */
     public function toArray($request)
     {
-        $inCart = null;
-        $cartProductQuantity = null;
-        if (Auth::check()) {
-            $cart_id = auth('user')->user()->cart->id;
-            $inCart = CartProduct::where('product_id', $this->id)->where('cart_id', $cart_id)->where('provider_shop_details_id', $this->shop_id)->exists();
-            if ($inCart) {
-                $cartProductQuantity = CartProduct::where('product_id', $this->id)->where('cart_id', $cart_id)->where('provider_shop_details_id', $this->shop_id)->value('quantity');
-            }
-        }
+     
+
 
         return [
 
@@ -44,8 +37,8 @@ class ProductsResource extends JsonResource
                 'name' => $this->shop->shop_name,
 
             ],
-            'in_cart' => $inCart ? $inCart : false,
-            'quantity' => isset($cartProductQuantity) ? $cartProductQuantity : null,
+            'in_cart' => $this->userProductInCart($this->id, auth('user')->check() ? auth('user')->user()->cart->id:null),
+            'quantity' => $this->userCartProductQuantity($this->id, auth('user')->check() ? auth('user')->user()->cart->id:null), 
             'product_image' => new ImageResource($this->getFirstMedia('product_images')) ?? null,
         ];
     }

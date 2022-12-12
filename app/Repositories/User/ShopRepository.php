@@ -87,10 +87,10 @@ class ShopRepository extends Controller implements ShopInrerface
             $q->where('collection_id',$request->collection_id);
         }
 
-        $shop = $q->orderBy('order', 'ASC')->get();
+        $products = $q->orderBy('order', 'ASC')->get();
 
 
-        return $shop;
+        return $products;
     }
 
     /**

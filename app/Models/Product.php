@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\FileTrait;
+use App\Traits\ProductCartTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ use Spatie\Tags\HasTags;
 
 class Product extends Model implements HasMedia
 {
-    use HasFactory, HasTags, InteractsWithMedia, FileTrait;
+    use HasFactory, HasTags, InteractsWithMedia, FileTrait , ProductCartTrait;
 
     protected $mediaCollection = 'product_images';
     protected $appends = ['Tags', 'order_price'];
