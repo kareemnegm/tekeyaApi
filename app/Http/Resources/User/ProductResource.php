@@ -21,19 +21,7 @@ class ProductResource extends JsonResource
      */
     public function toArray($request)
     {
-        $inCart = null;
-        $cartProductQuantity = null;
-
-        if (auth('user')->check()) {
-            $cart_id = auth('user')->user()->cart->id;
-            $inCart = CartProduct::where('product_id', $this->id)->where('cart_id', $cart_id)->where('provider_shop_details_id', $this->shop->id)->exists();
-            
-            if ($inCart) {
-                $cartProductQuantity = CartProduct::where('product_id', $this->id)->where('cart_id', $cart_id)->where('provider_shop_details_id', $this->shop->id)->value('quantity');
-            }
-        }
-
-
+   
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -58,7 +46,8 @@ class ProductResource extends JsonResource
             ],
             'tags' => $this->when(isset($this->tags),  TagsResource::collection($this->tags)),
 
-            'in_cart' => $inCart ? $inCart : false,
+            'in_cart' => $this->userProductInCart($this->id, auth('user')->check() ? auth('user')->user()->cart->id:null),
+            'quantity' => $this->userCartProductQuantity($this->id, auth('user')->check() ? auth('user')->user()->cart->id:null), 
 
             'product_images' => ImageResource::collection($this->getMedia('product_images')) ?? null,
             'created_at' => $this->created_at ? Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('m-d-Y g:i A') : null,
