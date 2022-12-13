@@ -50,7 +50,7 @@ class ShopDetailsInSingelProductResource extends JsonResource
 
             'delivery_time' => 30,
 
-            // 'nearest_brnach'=> isset($brnach) ? New NearestBranchResource($brnach) :null,
+            'distance'=> isset($brnach) ? ($brnach->distance > 1 ? round($brnach->distance, 1) . " K" : round($brnach->distance * 1000) . " M"):null
 
             ];
     }

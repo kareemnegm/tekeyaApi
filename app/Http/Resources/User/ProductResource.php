@@ -21,7 +21,7 @@ class ProductResource extends JsonResource
      */
     public function toArray($request)
     {
-   
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -30,7 +30,7 @@ class ProductResource extends JsonResource
             'offer_price' => $this->offer_price,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
-            'stock_quantity ' => $this->branchStockQuanttity($request,$this->id),
+            // 'stock_quantity ' => $this->branchStockQuanttity($request,$this->id),
             'is_published' => $this->is_published,
             'to_donation' => $this->to_donation,
 
@@ -47,7 +47,7 @@ class ProductResource extends JsonResource
             'tags' => $this->when(isset($this->tags),  TagsResource::collection($this->tags)),
 
             'in_cart' => $this->userProductInCart($this->id, auth('user')->check() ? auth('user')->user()->cart->id:null),
-            'quantity' => $this->userCartProductQuantity($this->id, auth('user')->check() ? auth('user')->user()->cart->id:null), 
+            'quantity' => $this->userCartProductQuantity($this->id, auth('user')->check() ? auth('user')->user()->cart->id:null),
 
             'product_images' => ImageResource::collection($this->getMedia('product_images')) ?? null,
             'created_at' => $this->created_at ? Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('m-d-Y g:i A') : null,
