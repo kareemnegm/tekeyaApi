@@ -31,7 +31,7 @@ class ShopResource extends JsonResource
             'shop_cover' => new ImageResource($this->getFirstMedia('shop_cover')) ?? null,
 
             'delivery_time' => 30,
-            'address' => $this->branches->address,
+            'address' => $this->branches->address_details,
 
             'working_hours_day' => json_decode($this->branches->working_hours_day),
             'distance' => $this->distance > 1 ? round($this->distance, 1) . " K" : round($this->distance * 1000) . " M",
