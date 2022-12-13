@@ -13,11 +13,10 @@ class ProductRepository implements ProductInterface
      *
      * @return void
      */
-    public function mostPopularProduct()
+    public function mostPopularProduct($data)
     {
         $q = Product::query();
-        $products = $q->where('is_published', 1)->orderBy('id', 'ASC')->get();
-
+        $products = Product::where('is_published', 1)->productByDistance($data['latitude'], $data['longitude']);
         return $products;
     }
 
@@ -27,10 +26,12 @@ class ProductRepository implements ProductInterface
      *
      * @return void
      */
-    public function productJustForYou()
+    public function productJustForYou($data)
     {
         $q = Product::query();
-        $products = $q->where('is_published', 1)->orderBy('id', 'ASC')->get();
+        // $products = $q->where('is_published', 1)->orderBy('id', 'ASC')->get();
+        $products = Product::where('is_published', 1)->productByDistance($data['latitude'], $data['longitude']);
+
         return $products;
     }
 

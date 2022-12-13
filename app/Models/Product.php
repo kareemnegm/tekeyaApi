@@ -7,6 +7,7 @@ use App\Traits\ProductCartTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -167,6 +168,27 @@ class Product extends Model implements HasMedia
     public function getTagsAttribute()
     {
         return $this->tags()->get();
+    }
+
+    public function scopeProductByDistance($query, $latitude, $longitude, $categoryId = null, $distance = null, $unit = "km")
+    {
+        $distance = 30;
+        $constant = $unit == "km" ? 6371 : 3959;
+
+        $haversine = "(
+            6371 * acos(
+                cos(radians(" . $latitude . "))
+                * cos(radians(`latitude`))
+                * cos(radians(`longitude`) - radians(" . $longitude . "))
+                + sin(radians(" . $latitude . ")) * sin(radians(`latitude`))
+            )
+        )";
+    
+      return  $query->whereHas('shop.branches', function ($q) use($haversine,$distance) {
+             $q->select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"),'latitude','longitude')
+                ->having("distance", "<=", $distance);
+            })->get();
+           
     }
     
 }

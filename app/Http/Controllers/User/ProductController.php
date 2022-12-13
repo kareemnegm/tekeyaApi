@@ -1,18 +1,19 @@
 <?php
-
 namespace App\Http\Controllers\User;
-
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\ProductAreaFormRequest;
 use App\Http\Resources\Provider\VariantValueResource;
 use App\Http\Resources\User\ProductResource;
 use App\Http\Resources\User\ProductsResource;
 use App\Interfaces\User\ProductInterface;
 use App\Models\Product;
+use App\Traits\UserAreaTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
+    use UserAreaTrait;
     /**
      * Undocumented variable
      *
@@ -30,26 +31,35 @@ class ProductController extends Controller
     }
 
 
-    public function productsForYou(Request $request)
+    public function productsForYou(ProductAreaFormRequest $request)
     {
 
-        //! in teh if conndition should handle the nearest and the products for the user when he is logged in
-        if (Auth::check()) {
-            $user_id = auth('user')->user->id;
-            dd($user_id);
-            $products = $this->ProductRepository->productJustForYou();
-            return $this->paginateCollection(ProductsResource::collection($products), $request->limit, 'products');
+        $data=$request->validated();
+
+        $data= $this->userArea($data);
+
+        if(!isset($data['latitude']) && !isset($data['longitude'])){
+            return $this->errorResponseWithMessage('User not have any area location or lat and long',422);
         }
 
-        $products = $this->ProductRepository->productJustForYou();
+        $products = $this->ProductRepository->productJustForYou($data);
         return $this->paginateCollection(ProductsResource::collection($products), $request->limit, 'products');
     }
 
 
 
-    public function mostPopularProduct(Request $request)
+    public function mostPopularProduct(ProductAreaFormRequest $request)
     {
-        $products = $this->ProductRepository->mostPopularProduct();
+
+        $data=$request->validated();
+
+        $data= $this->userArea($data);
+
+        if(!isset($data['latitude']) && !isset($data['longitude'])){
+            return $this->errorResponseWithMessage('User not have any area location or lat and long',422);
+        }
+
+        $products = $this->ProductRepository->mostPopularProduct($data);
         return $this->paginateCollection(ProductsResource::collection($products), $request->limit, 'products');
     }
 

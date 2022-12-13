@@ -26,20 +26,17 @@ class CartRepository extends Controller implements CartInterface
         $cart_id = Auth::user()->cart->id;
         $product=Product::findOrFail($req['product_id']);
 
-        $availableStock=$product->stock_quantity;
+        // $availableStock=$product->stock_quantity;
 
         $productInCart = CartProduct::where('cart_id',$cart_id)->where('product_id',$req['product_id'])->where('provider_shop_details_id',$req['shop_id'])->first();
 
 
         $quantity=isset($productInCart) ? $productInCart->quantity + $req['quantity'] :$req['quantity'];
 
-        if ($availableStock <  $quantity) {
-            return $this->errorResponseWithMessage('Out Of Stock',422);
-        }
-        elseif($availableStock >  $req['quantity'] & !$productInCart){
-
-        // $quantity=$req['quantity']   ?  :$req['quantity'];
-
+        // if ($availableStock <  $quantity) {
+        //     return $this->errorResponseWithMessage('Out Of Stock',422);
+        // }
+        if(!$productInCart){
             CartProduct::create([
             'cart_id'=> $cart_id,
             'product_id'=> $req['product_id'],
@@ -71,16 +68,9 @@ class CartRepository extends Controller implements CartInterface
         where('product_id',$req['product_id'])->where('provider_shop_details_id',$req['shop_id'])->first();
 
 
-        $product=Product::findOrFail($req['product_id']);
-        $availableStock=$product->stock_quantity;
-
-
-        if ($availableStock <  $req['quantity']) {
-
-
-            return $this->errorResponseWithMessage('Out Of Stock.',422);
-
-        }elseif ($req['quantity'] == 0) {
+        // $product=Product::findOrFail($req['product_id']);
+        
+        if ($req['quantity'] == 0) {
 
             $productInCart->delete();
 
@@ -95,10 +85,9 @@ class CartRepository extends Controller implements CartInterface
 
 
 
-        }elseif($availableStock >=  $req['quantity'] && $productInCart){
+        }elseif($productInCart){
 
             $productInCart->update(['quantity' => $req['quantity']]);
-
 
             $getCartItmes= $this->getCartProducts();
 
@@ -192,24 +181,22 @@ class CartRepository extends Controller implements CartInterface
 
 
         $product=Product::findOrFail($req['product_id']);
-        $availableStock=$product->stock_quantity;
+        // $availableStock=$product->stock_quantity;
 
 
-        if ($availableStock <  $req['quantity']) {
+        // if ($availableStock <  $req['quantity']) {
+            // return $this->errorResponseWithMessage('Out Of Stock.',422);
 
-
-            return $this->errorResponseWithMessage('Out Of Stock.',422);
-
-        }elseif ($req['quantity'] == 0) {
-
+        }if ($req['quantity'] == 0) {
             $productInCart->delete();
             return $this->successResponse('Product removed from cart successfully.');
+        }
 
-        }elseif($availableStock >=  $req['quantity'] && $productInCart){
+        // }elseif($availableStock >=  $req['quantity'] && $productInCart){
 
             $productInCart->update(['quantity' => $req['quantity']]);
             return $this->successResponse('Product quantity updated successfully.');
-        }
-    }
+        // }
+    //  }
     }
 }

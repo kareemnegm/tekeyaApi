@@ -41,7 +41,6 @@ class MultiAddProductsCartForRequest extends BaseFormRequest
                 new ProductInCartRule($request)
             ],
     
-                
                 '*.quantity'=> 'required|integer'            
         ];
     }

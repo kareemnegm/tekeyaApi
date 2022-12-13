@@ -55,10 +55,10 @@ class ShopRepository extends Controller implements ShopInrerface
         if ($request->category_id) {
             $category = Category::findOrFail($request->category_id);
 
-            $q = providerShopBranch::ByDistance($request['latitude'], $category->shops->pluck('id'));
+            $q = providerShopBranch::ByDistance($request['latitude'],$request['longitude'], $category->shops->pluck('id'));
 
         } else {
-            $q = providerShopBranch::ByDistance($request['latitude']);
+            $q = providerShopBranch::ByDistance($request['latitude'],$request['longitude']);
         }
 
         return $q;

@@ -28,14 +28,13 @@ class DeleteShopFromCartRequest extends BaseFormRequest
      */
     public function rules(Request $request)
     {
-        $cart_id = Auth::user()->cart->id;
-        $cart  = Cart::findOrFail($cart_id);
+        // $cart_id = Auth::user()->cart->id;
+        // $cart  = Cart::findOrFail($cart_id);
         return [
             'shop_id' => [
             'required',
-
-            Rule::exists('cart_product', 'provider_shop_details_id') ->                    
-              where('cart_id',$cart->id) ->where('provider_shop_details_id',$request->shop_id)
+                Rule::exists('cart_product', 'provider_shop_details_id') ->                    
+                where('cart_id',Auth::user()->cart->id) ->where('provider_shop_details_id',$request->shop_id)
             ],
         ];
     }

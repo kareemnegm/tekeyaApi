@@ -36,7 +36,10 @@ class ProductQuantityFormRequest extends BaseFormRequest
                     'required',                                                            
                     Rule::exists('cart_product', 'product_id')                     
                     ->where('product_id',$request->product_id)
-                    ->where('cart_id',$request['cart_id']),                                                                    
+                    ->where('cart_id',$request['cart_id']),    
+
+                    Rule::exists('products', 'id')                     
+                    ->where('is_published',1),                                                                    
                 ],  
                 'shop_id' => [                                                                  
                     'required',                                                            

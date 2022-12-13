@@ -9,14 +9,14 @@ interface ProductInterface {
      *
      * @return void
      */
-    public function mostPopularProduct();
+    public function mostPopularProduct($request);
 
     /**
      * Undocumented function
      *
      * @return void
      */
-    public function productJustForYou();
+    public function productJustForYou($request);
 
         /**
      * Undocumented function
