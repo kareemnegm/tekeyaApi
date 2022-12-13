@@ -32,5 +32,9 @@ class NewShopsFormRequest extends BaseFormRequest
             ];
         }
 
+        return [
+
+        ];
+
     }
 }

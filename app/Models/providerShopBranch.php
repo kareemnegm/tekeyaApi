@@ -78,6 +78,29 @@ class providerShopBranch extends Model
 
 
 
+
+    public function scopeShopsCategoryByDistance($query, $latitude, $longitude, $shopIDs , $distance = null, $unit = "km")
+    {
+        $distance = 30;
+        $constant = $unit == "km" ? 6371 : 3959;
+
+        $haversine = "(
+            6371 * acos(
+                cos(radians(" . $latitude . "))
+                * cos(radians(`latitude`))
+                * cos(radians(`longitude`) - radians(" . $longitude . "))
+                + sin(radians(" . $latitude . ")) * sin(radians(`latitude`))
+            )
+        )";
+            return providerShopBranch::with('shop')->whereIn('shop_id', $shopIDs)->with('shop')->select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"),'latitude','longitude')
+                ->having("distance", "<=", $distance)
+                ->orderby("distance", "asc")->get();
+        
+
+           
+
+        
+    }
     public function scopeByDistance($query, $latitude, $longitude, $shopIDs = null, $distance = null, $unit = "km")
     {
         $distance = 30;

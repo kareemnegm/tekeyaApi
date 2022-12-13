@@ -5,9 +5,11 @@ use App\Interfaces\User\ShopInrerface;
 use App\Models\Category;
 use App\Models\ProviderShopDetails;
 use App\Interfaces\User\CategoryInterface;
+use App\Models\providerShopBranch;
 
 class CategoryRepository implements CategoryInterface
 {
+    
 
     /**
      * Listet Nearts Shop function
@@ -60,12 +62,14 @@ class CategoryRepository implements CategoryInterface
      */
     public function categoryShops($request){
 
-    $limit=$request->limit ?$request->limit:10;
+    // $limit=$request->limit ?$request->limit:10;
 
 
-        $category = Category::findOrFail($request->category_id);
-            $q=$category->shops();
+        $category = Category::findOrFail($request['category_id']);
+            $shopIds=$category->shops()->pluck('shop_id');
 
+
+            $shops=providerShopBranch::shopsCategoryByDistance($request['latitude'], $request['longitude'],$shopIds);
             // if ($request->is_publish) {
             //     $is_publish = $request->is_publish === 'true'? 1: 0;
             //     $q->where('is_publish',$is_publish);
@@ -73,7 +77,7 @@ class CategoryRepository implements CategoryInterface
             // if ($request->page) {
             //     $shops = $q->orderBy('id','DESC')->paginate($limit);
             // } else {
-                $shops = $q->orderBy('id','DESC')->get();
+                // $shops = $q->orderBy('id','DESC')->get();
             // }
 
         return $shops;

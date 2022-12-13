@@ -11,11 +11,12 @@ use App\Http\Resources\User\ProductsResource;
 use App\Http\Resources\User\ShopResource;
 use App\Http\Resources\User\SubCategoriesResource;
 use App\Interfaces\User\CategoryInterface;
+use App\Traits\UserAreaTrait;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    
+    use UserAreaTrait;
     /**
      * Undocumented variable
      *
@@ -65,8 +66,18 @@ class CategoryController extends Controller
      */
     public function categoryShops(CategoryIdFormRequest $request)
     {
-        $categoryShops=$this->CategoryRepository->categoryShops($request);
-        return $this->paginateCollection(ShopCategoryResource::collection($categoryShops),$request->limit,'category_shops');
+
+        $data=$request->validated();
+        
+        $data= $this->userArea($data);
+
+        if(!isset($data['latitude']) && !isset($data['longitude'])){
+            return $this->errorResponseWithMessage('User not have any area location or lat and long',422);
+        }
+
+
+        $categoryShops=$this->CategoryRepository->categoryShops($data);
+        return $this->paginateCollection(ShopCategoryResource::collection($categoryShops),$request['limit'],'category_shops');
 
     }
 
