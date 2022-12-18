@@ -5,6 +5,8 @@ namespace App\Interfaces\User;
 interface OrderInterface
 {
 
+    public function cancelOrder($data);
+
     /**
      * Undocumented function
      *
@@ -36,7 +38,7 @@ interface OrderInterface
      * @return void
      */
     public function orderDetails($req);
-    
-    
+
+
 
 }
