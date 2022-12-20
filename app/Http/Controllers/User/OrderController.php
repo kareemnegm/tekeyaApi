@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\OrderDetielsRequest;
 use App\Http\Requests\User\OrderReviewFormRequest;
 use App\Http\Requests\User\PlaceOrderFormRequest;
+use App\Http\Requests\UserCancelOrderFromRequest;
 use App\Http\Resources\User\MyOrderListResource;
 use App\Http\Resources\User\PlaceOrderResource;
 use App\Interfaces\User\OrderInterface;
@@ -92,5 +93,11 @@ class OrderController extends Controller
     }
 
 
+    public function cancelOrder(UserCancelOrderFromRequest $request)
+{
+    $orderDetails=$this->orderRepository->cancelOrder($request->validated());
+
+    return $this->successResponse('order canceled successful',200);
+}
 
 }

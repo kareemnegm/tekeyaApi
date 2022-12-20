@@ -27,6 +27,19 @@ use Illuminate\Support\Facades\DB;
 
 class OrderRepository extends Controller implements OrderInterface
 {
+
+
+    public function cancelOrder($data)
+    {
+        $order = Order::findOrFail($data['order_id']);
+       $orderShops= $order->orderShops()->whereHas('deliveryType', function ($query) {
+            $query->where('order_shop_status', 'pending');
+        })->get();
+        foreach($orderShops as $orderShop){
+            $orderShop->deliveryType()->update(['order_user_status'=>'canceled','order_shop_status'=>'canceled']);
+        }
+
+    }
     /**
      * New Shop Liste function
      *
@@ -144,7 +157,7 @@ class OrderRepository extends Controller implements OrderInterface
 
 
                 $shopItemsPrice = $shopItems->sum(function ($product) {
-                    return $product->product->order_price*$product->quantity;
+                    return $product->product->order_price * $product->quantity;
                 });
 
                 $totalShopItemPrice += $shopItemsPrice;
@@ -252,10 +265,6 @@ class OrderRepository extends Controller implements OrderInterface
             DB::rollback();
             return $this->errorResponseWithMessage('Order not place please try agin', 422);
         }
-
-
-
-
     }
 
 
@@ -374,7 +383,7 @@ class OrderRepository extends Controller implements OrderInterface
         // if ($request->page) {
         //     $orders = $q->orderBy('date_order_placed', 'DESC')->paginate($limit);
         // } else {
-            $orders = $q->orderBy('date_order_placed', 'DESC')->get();
+        $orders = $q->orderBy('date_order_placed', 'DESC')->get();
         // }
 
         return $orders;
