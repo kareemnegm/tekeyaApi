@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\CategoryIdFormRequest;
+use App\Http\Requests\User\SubCategoryFormRequest;
 use App\Http\Resources\ShopCategoryResource;
 use App\Http\Resources\SubCategoryResource;
 use App\Http\Resources\User\CategoriesResource;
@@ -52,7 +53,7 @@ class CategoryController extends Controller
      * @param Request $request
      * @return void
      */
-    public function getSubCategories(CategoryIdFormRequest $request)
+    public function getSubCategories(SubCategoryFormRequest $request)
     {
         $mainCategoires=$this->CategoryRepository->getSubCategories($request);
         return $this->paginateCollection(SubCategoriesResource::collection($mainCategoires),$request->limit,'sub_categories');
