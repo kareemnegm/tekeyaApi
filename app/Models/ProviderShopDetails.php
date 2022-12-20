@@ -53,12 +53,12 @@ class ProviderShopDetails extends Model implements HasMedia
     }
     public function productsCarts()
     {
-        return $this->belongsToMany(Product::class, 'cart_product')->withPivot(['quantity'])->select(['product_id', 'name', 'description', 'price', 'offer_price', 'quantity']);
+        return $this->belongsToMany(Product::class, 'cart_product')->withPivot(['quantity','variants'])->select(['product_id', 'name', 'description', 'price', 'offer_price', 'quantity']);
     }
 
     public function cart()
     {
-        return $this->belongsToMany(Cart::class, 'cart_product', 'provider_shop_details_id')->withPivot(['product_id', 'quantity'])->withTimestamps();
+        return $this->belongsToMany(Cart::class, 'cart_product', 'provider_shop_details_id')->withPivot(['product_id', 'quantity','variants'])->withTimestamps();
     }
     public function provider()
     {

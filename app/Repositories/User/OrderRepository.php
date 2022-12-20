@@ -3,14 +3,10 @@
 namespace App\Repositories\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\User\CartProductResource;
 use App\Http\Resources\User\OrderReviewResource;
 use App\Http\Resources\User\PaymentOptionResource;
 use App\Http\Resources\User\PlaceOrderResource;
-use App\Http\Resources\User\UserCartResource;
-use App\Interfaces\User\CartInterface;
 use App\Interfaces\User\OrderInterface;
-use App\Models\Cart;
 use App\Models\CartProduct;
 use App\Models\DeliveryOption;
 use App\Models\Invoices;
@@ -23,16 +19,11 @@ use App\Models\OrderShop;
 use App\Models\PaymentOption;
 use App\Models\Product;
 use App\Models\ProviderShopDetails;
-use App\Models\User;
-use App\Notifications\User\UserCheckoutOrder;
 use Carbon\Carbon;
-use GuzzleHttp\Exception\ClientException;
-use Illuminate\Http\Client\HttpClientException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Str;
+
 
 class OrderRepository extends Controller implements OrderInterface
 {
@@ -113,9 +104,9 @@ class OrderRepository extends Controller implements OrderInterface
 
         $userCart = CartProduct::with(['shop', 'product'])->where('cart_id', $user->cart->id)->get();
 
-        if ($this->productsAreNoLongerAvailable($userCart)) {
-            return $this->errorResponseWithMessage('Sorry! One of the items in your cart is no longer avialble.', 422);
-        }
+        // if ($this->productsAreNoLongerAvailable($userCart)) {
+        //     return $this->errorResponseWithMessage('Sorry! One of the items in your cart is no longer avialble.', 422);
+        // }
 
 
         $date = Carbon::now();
@@ -202,16 +193,21 @@ class OrderRepository extends Controller implements OrderInterface
 
 
                 foreach ($shopItems as $shopProduct) {
+                    // if(isset($shopProduct->variants)){
+                    //     // dd(json_encode(['anwar'=>'amwar']));
+                    // }
                     $product = [
                         'order_shop_id' => $shopOrder->id,
                         'order_id' => $order->id,
                         'product_id' => $shopProduct->product->id,
                         'quantity' => $shopProduct->quantity,
                         'unit_price' => $shopProduct->product->order_price,
+                        'variants' => isset($shopProduct->variants) ? $shopProduct->variants : null,
                         'unit_total' => $shopProduct->product->order_price * $shopProduct->quantity,
                     ];
 
                     OrderItem::create($product);
+
                 }
             }
 
@@ -252,6 +248,7 @@ class OrderRepository extends Controller implements OrderInterface
             DB::rollback();
             return $exception->getResponse()->getData();
         } catch (\Exception $e) {
+            dd($e);
             DB::rollback();
             return $this->errorResponseWithMessage('Order not place please try agin', 422);
         }
@@ -391,7 +388,6 @@ class OrderRepository extends Controller implements OrderInterface
     public function orderDetails($request)
     {
         $user = Auth::user();
-
         $order = Order::where('user_id', $user->id)->where('order_number', $request['order_number'])->firstOrFail();
 
         return $order;

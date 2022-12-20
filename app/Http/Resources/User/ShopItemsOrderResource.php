@@ -22,6 +22,7 @@ class ShopItemsOrderResource extends JsonResource
             'price' => $this->product->price,
             'offer_price' => $this->product->offer_price,
             'quantity' => $this->quantity,
+            'variants' => isset($this->variants) ?json_decode($this->variants):null,
             'product_image' => new ImageResource($this->product->getFirstMedia('product_images')) ?? null,
         ];
     }

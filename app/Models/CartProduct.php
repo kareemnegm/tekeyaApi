@@ -15,7 +15,8 @@ class CartProduct extends Model
         'product_id',
         'cart_id',
         'provider_shop_details_id',
-        'quantity'
+        'quantity',
+        'variants'
 
     ];
 

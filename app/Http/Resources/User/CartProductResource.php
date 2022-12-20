@@ -22,6 +22,7 @@ class CartProductResource extends JsonResource
             'price' => $this->price,
             'offer_price' => $this->offer_price,
             'quantity' => $this->quantity,
+            'variants' => isset($this->pivot->variants) ? json_decode($this->pivot->variants) :NULL,
             'product_image' => new ImageResource($this->getFirstMedia('product_images')) ?? null,
         ];
     }

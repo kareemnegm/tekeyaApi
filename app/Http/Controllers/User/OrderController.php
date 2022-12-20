@@ -7,7 +7,6 @@ use App\Http\Requests\User\OrderDetielsRequest;
 use App\Http\Requests\User\OrderReviewFormRequest;
 use App\Http\Requests\User\PlaceOrderFormRequest;
 use App\Http\Resources\User\MyOrderListResource;
-use App\Http\Resources\User\OrderReviewResource;
 use App\Http\Resources\User\PlaceOrderResource;
 use App\Interfaces\User\OrderInterface;
 use Illuminate\Http\Request;
@@ -74,7 +73,7 @@ class OrderController extends Controller
     {
         $orders=$this->orderRepository->myOrderList($request);
 
-        return $this->paginateCollection( MyOrderListResource::collection($orders),$request->limit,'success');
+        return $this->paginateCollection(MyOrderListResource::collection($orders),$request->limit,'my_orders');
 
     }
 

@@ -48,7 +48,9 @@ class ProductQuantityFormRequest extends BaseFormRequest
                     ->where('cart_id',$request['cart_id']),                                                                    
                 ],  
 
-                'quantity'=> 'required|integer'                                                                     
+                'quantity'=> 'required|integer',
+                'variants'=> 'nullable',
+                                                               
           
             ];
         

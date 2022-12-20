@@ -27,11 +27,30 @@ class CartRepository extends Controller implements CartInterface
         $product=Product::findOrFail($req['product_id']);
 
         // $availableStock=$product->stock_quantity;
+        $q = CartProduct::where('cart_id',$cart_id)->where('product_id',$req['product_id'])->where('provider_shop_details_id',$req['shop_id']);
 
-        $productInCart = CartProduct::where('cart_id',$cart_id)->where('product_id',$req['product_id'])->where('provider_shop_details_id',$req['shop_id'])->first();
+
+        if(!isset($req['variants'])){
+
+        $req['variants']=[];
+        $variants=$product->variant;
+
+        foreach($variants as $variant){
+            $arr=[];
+            $arr=[$variant->name => $variant->value->where('is_default',1)->first()->value];
+            $req['variants']=array_merge($req['variants'], $arr);
+
+            }
+        }
+        if(isset($req['variants'])){
+            $productInCart=$q->whereJsonContains('variants',$req['variants'])->first();
+        }else{
+            $productInCart=$q->first();
+        }
 
 
         $quantity=isset($productInCart) ? $productInCart->quantity + $req['quantity'] :$req['quantity'];
+
 
         // if ($availableStock <  $quantity) {
         //     return $this->errorResponseWithMessage('Out Of Stock',422);
@@ -42,9 +61,9 @@ class CartRepository extends Controller implements CartInterface
             'product_id'=> $req['product_id'],
             'provider_shop_details_id'=> $req['shop_id'],
             'quantity'=> $req['quantity'],
+            'variants'=> json_encode($req['variants']),
             ]);
             return $this->successResponse('Product added in cart successfully.');
-
         }
 
         elseif($productInCart){
@@ -65,8 +84,8 @@ class CartRepository extends Controller implements CartInterface
         $cart_id = Auth::user()->cart->id;
 
         $productInCart = CartProduct::where('cart_id',$cart_id)->
-        where('product_id',$req['product_id'])->where('provider_shop_details_id',$req['shop_id'])->first();
-
+        where('product_id',$req['product_id'])->where('provider_shop_details_id',$req['shop_id'])->
+        whereJsonContains('variants',$req['variants'])->first();
 
         // $product=Product::findOrFail($req['product_id']);
         

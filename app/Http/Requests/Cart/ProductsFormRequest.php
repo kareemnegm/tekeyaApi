@@ -45,7 +45,9 @@ class ProductsFormRequest extends BaseFormRequest
 
                 new ShopinCartRule($request)
             ],
-            'quantity'=> 'required|integer'
+            'quantity'=> 'required|integer',
+            
+            'variants'=> 'nullable',
 
         ];
     }
