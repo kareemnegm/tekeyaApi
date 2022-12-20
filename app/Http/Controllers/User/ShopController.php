@@ -192,11 +192,11 @@ class ShopController extends Controller
     {
         $data=$request->validated();
 
-        $data= $this->userArea($data);
+        // $data= $this->userArea($data);
 
-        if(!isset($data['latitude']) && !isset($data['longitude'])){
-            return $this->errorResponseWithMessage('User not have any area location or lat and long',422);
-        }
+        // if(!isset($data['latitude']) && !isset($data['longitude'])){
+        //     return $this->errorResponseWithMessage('User not have any area location or lat and long',422);
+        // }
         
 
         $products = $this->shopRepository->getShopCollections($data['shop_id']);
