@@ -52,8 +52,8 @@ class ShopRepository extends Controller implements ShopInrerface
     public function shopsProducts($request)
     {
 
-        if ($request->category_id) {
-            $category = Category::findOrFail($request->category_id);
+        if (isset($request['category_id'])) {
+            $category = Category::findOrFail($request['category_id']);
 
             $q = providerShopBranch::ByDistance($request['latitude'],$request['longitude'], $category->shops->pluck('id'));
 
@@ -101,7 +101,7 @@ class ShopRepository extends Controller implements ShopInrerface
      */
     public function getShopDetails($request)
     {
-    
+
         $q = ProviderShopDetails::NearestShop($request['latitude'], $request['longitude'], $request['shop_id'])->first();
         return $q;
     }
@@ -161,7 +161,7 @@ class ShopRepository extends Controller implements ShopInrerface
 
     }
 
-    
+
 
 
 

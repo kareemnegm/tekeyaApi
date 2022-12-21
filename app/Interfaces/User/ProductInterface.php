@@ -30,7 +30,7 @@ interface ProductInterface {
      *
      * @return void
      */
-    public function similarProducts($productId);
+    public function similarProducts($productId,$request);
 
 
     public function getVariantsValues($variant_id);

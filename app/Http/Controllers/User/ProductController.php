@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductFilterFormRequest;
 use App\Http\Requests\User\ProductAreaFormRequest;
 use App\Http\Resources\Provider\VariantValueResource;
 use App\Http\Resources\User\ProductResource;
@@ -83,9 +84,9 @@ class ProductController extends Controller
      * @param Request $request
      * @return void
      */
-    public function similarProducts(Request $request, $product_id)
+    public function similarProducts(ProductFilterFormRequest $request, $product_id)
     {
-        $products = $this->ProductRepository->similarProducts($product_id);
+        $products = $this->ProductRepository->similarProducts($product_id,$request->validated());
         return $this->paginateCollection(ProductsResource::collection($products), $request->limit, 'similar_products');
     }
 

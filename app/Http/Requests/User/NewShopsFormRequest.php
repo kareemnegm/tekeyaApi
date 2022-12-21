@@ -26,15 +26,12 @@ class NewShopsFormRequest extends BaseFormRequest
     {
         if (!auth('user')->check()) {
             return [
-                'area_id'=>'required_without:latitude,longitude|exists:areas,id',
+                'area_id' => 'required_without:latitude,longitude|exists:areas,id',
                 'latitude' => ['required_without:area_id', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
                 'longitude' => ['required_without:area_id', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
             ];
         }
 
-        return [
-
-        ];
-
+        return [];
     }
 }
