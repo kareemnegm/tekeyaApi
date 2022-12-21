@@ -27,22 +27,22 @@ class SingleShopResource extends BaseFormRequest
     {
 
 
-        if (auth('user')->check()) {
-            return [
-                'shop_id' => 'required|exists:provider_shop_details,id',
+        // if (auth('user')->check()) {
+        //     return [
+        //         'shop_id' => 'required|exists:provider_shop_details,id',
 
-                // 'shop_id'=>[new AreaShopRule(request()->latitude,request()->longitude)],
+        //         // 'shop_id'=>[new AreaShopRule(request()->latitude,request()->longitude)],
 
-            ];
-        }
+        //     ];
+        // }
 
         return [
             'shop_id' => 'required|exists:provider_shop_details,id',
-            'area_id'=>'required_without:latitude,longitude|exists:areas,id',
-            'latitude' => ['required_without:area_id', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
-            'longitude' => ['required_without:area_id', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
+            // 'area_id'=>'required_without:latitude,longitude|exists:areas,id',
+            // 'latitude' => ['required_without:area_id', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
+            // 'longitude' => ['required_without:area_id', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
         ];
-    
+
 
     }
 }

@@ -102,7 +102,7 @@ class ShopRepository extends Controller implements ShopInrerface
     public function getShopDetails($request)
     {
 
-        $q = ProviderShopDetails::NearestShop($request['latitude'], $request['longitude'], $request['shop_id'])->first();
+        $q = ProviderShopDetails::find($request['shop_id']);
         return $q;
     }
 
