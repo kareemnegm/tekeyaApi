@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\User;
 
+use App\Http\Requests\BaseFormRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RelatedShopFormRequest extends FormRequest
+class RelatedShopFormRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +14,7 @@ class RelatedShopFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,7 +26,7 @@ class RelatedShopFormRequest extends FormRequest
     {
        if (auth('user')->check()) {
         return [
-            
+
         ];
     }
 
