@@ -62,10 +62,11 @@ class ProductRepository implements ProductInterface
         $product = Product::findOrFail($productId);
         $similarProducts = Product::where('category_id', $product->category_id)->where('is_published', 1)->where('shop_id', '!=', $product->shop_id);
 
-        if ($request['filter'] == 'category') {
+    
+        if (isset($request['filter']) && $request['filter'] == 'category') {
             $similarProducts->where('category_id', $request['category_id']);
         }
-        if ($request['filter'] == 'shop') {
+        if ( isset($request['filter']) && $request['filter'] == 'shop') {
             $similarProducts->where('shop_id', $request['shop_id']);
         }
         if (isset($request['sortBy']) && $request['sortBy'] == 'newest') {
