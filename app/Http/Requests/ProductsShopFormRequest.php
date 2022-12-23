@@ -24,6 +24,7 @@ class ProductsShopFormRequest extends BaseFormRequest
      */
     public function rules()
     {
+        
         return [
             'shop_id' => 'required|exists:provider_shop_details,id',
             // 'area_id'=>'nullable|exists:areas,id',

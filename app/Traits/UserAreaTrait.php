@@ -19,7 +19,7 @@ trait UserAreaTrait
         if (auth('user')->check()) {
 
             $user = auth('user')->user();
-    
+
             if ($user->userLocation) {
                     $data['latitude'] = $user->userLocation->latitude;
                     $data['longitude'] = $user->userLocation->longitude;
@@ -27,8 +27,8 @@ trait UserAreaTrait
                 $area = Area::findOrFail($user->area_id);
                 $data['latitude'] = $area->latitude;
                 $data['longitude'] = $area->longitude;
-    
-    
+
+
         }
         }else{
             if(isset($data['area_id'])){

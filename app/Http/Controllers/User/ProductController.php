@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers\User;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductFilterFormRequest;
 use App\Http\Requests\User\ProductAreaFormRequest;
@@ -35,12 +37,12 @@ class ProductController extends Controller
     public function productsForYou(ProductAreaFormRequest $request)
     {
 
-        $data=$request->validated();
+        $data = $request->validated();
 
-        $data= $this->userArea($data);
+        $data = $this->userArea($data);
 
-        if(!isset($data['latitude']) && !isset($data['longitude'])){
-            return $this->errorResponseWithMessage('User not have any area location or lat and long',422);
+        if (!isset($data['latitude']) && !isset($data['longitude'])) {
+            return $this->errorResponseWithMessage('User not have any area location or lat and long', 422);
         }
 
         $products = $this->ProductRepository->productJustForYou($data);
@@ -52,12 +54,12 @@ class ProductController extends Controller
     public function mostPopularProduct(ProductAreaFormRequest $request)
     {
 
-        $data=$request->validated();
+        $data = $request->validated();
 
-        $data= $this->userArea($data);
+        $data = $this->userArea($data);
 
-        if(!isset($data['latitude']) && !isset($data['longitude'])){
-            return $this->errorResponseWithMessage('User not have any area location or lat and long',422);
+        if (!isset($data['latitude']) && !isset($data['longitude'])) {
+            return $this->errorResponseWithMessage('User not have any area location or lat and long', 422);
         }
 
         $products = $this->ProductRepository->mostPopularProduct($data);
@@ -71,9 +73,12 @@ class ProductController extends Controller
      * @param Request $request
      * @return void
      */
-    public function relatedProducts(Request $request, $product_id)
+    public function relatedProducts(ProductFilterFormRequest $request, $product_id)
     {
-        $products = $this->ProductRepository->relatedProducts($product_id);
+        $data = $request->validated();
+
+        $data = $this->userArea($data);
+        $products = $this->ProductRepository->relatedProducts($product_id, $data);
         return $this->paginateCollection(ProductsResource::collection($products), $request->limit, 'related_products');
     }
 
@@ -86,7 +91,10 @@ class ProductController extends Controller
      */
     public function similarProducts(ProductFilterFormRequest $request, $product_id)
     {
-        $products = $this->ProductRepository->similarProducts($product_id,$request->validated());
+        $data = $request->validated();
+
+        $data = $this->userArea($data);
+        $products = $this->ProductRepository->similarProducts($product_id, $data);
         return $this->paginateCollection(ProductsResource::collection($products), $request->limit, 'similar_products');
     }
 

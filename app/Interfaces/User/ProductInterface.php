@@ -23,7 +23,7 @@ interface ProductInterface {
      *
      * @return void
      */
-    public function relatedProducts($productId);
+    public function relatedProducts($productId,$request);
 
         /**
      * Undocumented function

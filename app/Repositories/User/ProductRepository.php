@@ -41,14 +41,36 @@ class ProductRepository implements ProductInterface
      *
      * @return void
      */
-    public function relatedProducts($productId)
+    public function relatedProducts($productId, $request)
     {
 
         $product = Product::findOrFail($productId);
 
-        $relatedProducts = Product::where('id', '!=', $product->id)->where('is_published', 1)->where('category_id', $product->category_id)->where('shop_id', $product->shop_id)->get();
+        $relatedProducts = Product::where('id', '!=', $product->id)->where('is_published', 1)->where('category_id', $product->category_id)->where('shop_id', $product->shop_id);
+        if (isset($request['filter']) && $request['filter'] == 'category') {
+            $relatedProducts->where('category_id', $request['category_id']);
+        }
+        if (isset($request['filter']) && $request['filter'] == 'shop') {
+            $relatedProducts->where('shop_id', $request['shop_id']);
+        }
+        if (isset($request['sortBy']) && $request['sortBy'] == 'newest') {
+            $relatedProducts->orderBy('created_at', 'desc');
+        }
 
-        return $relatedProducts;
+        if (isset($request['sortBy']) && $request['sortBy'] == 'alphabetical') {
+            $relatedProducts->orderBy('name', isset($request['sort']) ? $request['sort'] : 'asc');
+        }
+
+        if (isset($request['sortBy']) && $request['sortBy'] == 'price') {
+            $relatedProducts->orderBy('price', isset($request['sort']) ? $request['sort'] : 'desc');
+        }
+        if (isset($request['sortBy']) && $request['sortBy'] == 'nearest') {
+
+            $relatedProducts->productByDistance($request['latitude'], $request['longitude']);
+        }
+        $collections = $relatedProducts->get();
+
+        return $collections;
     }
 
     /**
@@ -62,25 +84,25 @@ class ProductRepository implements ProductInterface
         $product = Product::findOrFail($productId);
         $similarProducts = Product::where('category_id', $product->category_id)->where('is_published', 1)->where('shop_id', '!=', $product->shop_id);
 
-    
+
         if (isset($request['filter']) && $request['filter'] == 'category') {
             $similarProducts->where('category_id', $request['category_id']);
         }
-        if ( isset($request['filter']) && $request['filter'] == 'shop') {
+        if (isset($request['filter']) && $request['filter'] == 'shop') {
             $similarProducts->where('shop_id', $request['shop_id']);
         }
         if (isset($request['sortBy']) && $request['sortBy'] == 'newest') {
             $similarProducts->orderBy('created_at', 'desc');
         }
 
-        if (isset($request['sortBy']) &&$request['sortBy'] == 'alphabetical') {
+        if (isset($request['sortBy']) && $request['sortBy'] == 'alphabetical') {
             $similarProducts->orderBy('name', isset($request['sort']) ? $request['sort'] : 'asc');
         }
 
-        if (isset($request['sortBy']) &&$request['sortBy'] == 'price') {
+        if (isset($request['sortBy']) && $request['sortBy'] == 'price') {
             $similarProducts->orderBy('price', isset($request['sort']) ? $request['sort'] : 'desc');
         }
-        if (isset($request['sortBy']) &&$request['sortBy'] == 'nearest') {
+        if (isset($request['sortBy']) && $request['sortBy'] == 'nearest') {
 
             $similarProducts->productByDistance($request['latitude'], $request['longitude']);
         }
