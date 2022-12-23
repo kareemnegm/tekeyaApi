@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductsShopFormRequest;
 use App\Http\Requests\User\NewShopsFormRequest;
+use App\Http\Requests\User\RelatedShopFormRequest;
 use App\Http\Requests\User\ShopCollectionsFromRequest;
 use App\Http\Requests\User\ShopIdFormRequest;
 use App\Http\Requests\User\SingleShopResource;
@@ -164,7 +165,7 @@ class ShopController extends Controller
     }
 
 
-    public function relatedShops(Request $request,$productId)
+    public function relatedShops(RelatedShopFormRequest $request,$productId)
     {
 
         $data=$request->validated();

@@ -138,8 +138,7 @@ class ShopRepository extends Controller implements ShopInrerface
 
         $category = Category::findOrFail($product->category_id);
 
-        $shops = providerShopBranch::DistanceBranches($request['latitude'], $request['longitude'], $category->shops->pluck('id'))->unique('shop_id');
-
+        $shops = providerShopBranch::ByDistance($request['latitude'],$request['longitude'], $category->shops->pluck('id'));
 
         return $shops;
     }
