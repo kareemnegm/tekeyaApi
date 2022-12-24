@@ -107,10 +107,10 @@ class ShopController extends Controller
     }
 
 
-    public function suspendShop(ShopStatusFormRequest $request,$id)
+    public function statusShop(ShopStatusFormRequest $request,$id)
     {
         $data=$request->validated();
-        $this->ProviderRepository->suspendShop($data,$id);
+        $this->ProviderRepository->statusShop($data,$id);
         return $this->successResponse('shop suspended', 200);
     }
 
