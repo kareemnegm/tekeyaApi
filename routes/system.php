@@ -101,3 +101,14 @@ Route::get('orders', 'OrderController@ShopOrders');
 Route::put('order_shop', 'OrderController@AdminUpdateOrderDeliveryStatus');
 Route::get('finance_orders', 'OrderController@financeOrders');
 Route::get('finance_statistics', 'OrderController@financeStatistics');
+
+/**
+ * Custoemers
+ */
+
+Route::group(['prefix' => 'customer', 'namespace' => 'Provider'], function () {
+    Route::get('list', 'CustomerController@customerList');
+    Route::get('show/{userId}', 'CustomerController@customerDetails');
+    Route::get('search', 'CustomerController@customersSearch');
+
+});
