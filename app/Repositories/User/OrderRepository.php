@@ -32,13 +32,12 @@ class OrderRepository extends Controller implements OrderInterface
     public function cancelOrder($data)
     {
         $order = Order::findOrFail($data['order_id']);
-       $orderShops= $order->orderShops()->whereHas('deliveryType', function ($query) {
+        $orderShops = $order->orderShops()->whereHas('deliveryType', function ($query) {
             $query->where('order_shop_status', 'pending');
         })->get();
-        foreach($orderShops as $orderShop){
-            $orderShop->deliveryType()->update(['order_user_status'=>'canceled','order_shop_status'=>'canceled']);
+        foreach ($orderShops as $orderShop) {
+            $orderShop->deliveryType()->update(['order_user_status' => 'canceled', 'order_shop_status' => 'canceled']);
         }
-
     }
     /**
      * New Shop Liste function
@@ -116,6 +115,7 @@ class OrderRepository extends Controller implements OrderInterface
         $user = Auth::user();
 
         $userCart = CartProduct::with(['shop', 'product'])->where('cart_id', $user->cart->id)->get();
+
 
         // if ($this->productsAreNoLongerAvailable($userCart)) {
         //     return $this->errorResponseWithMessage('Sorry! One of the items in your cart is no longer avialble.', 422);
@@ -220,7 +220,6 @@ class OrderRepository extends Controller implements OrderInterface
                     ];
 
                     OrderItem::create($product);
-
                 }
             }
 
@@ -249,9 +248,7 @@ class OrderRepository extends Controller implements OrderInterface
             //  Notification::sendNow(null, new UserCheckoutOrder('Test Fire Base','Test Fire Base Order',User::where('id',19)->firstOrfail()->fcm_token));
 
             DB::commit();
-
-            // $userCart = CartProduct::with(['shop', 'product'])->where('cart_id', $user->cart->id)->delete();
-
+            CartProduct::with(['shop', 'product'])->where('cart_id', $user->cart->id)->delete();
             return $this->dataResponse(
                 new PlaceOrderResource($order),
                 'Order Checkout Successfully',
@@ -261,7 +258,6 @@ class OrderRepository extends Controller implements OrderInterface
             DB::rollback();
             return $exception->getResponse()->getData();
         } catch (\Exception $e) {
-            dd($e);
             DB::rollback();
             return $this->errorResponseWithMessage('Order not place please try agin', 422);
         }
