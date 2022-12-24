@@ -83,12 +83,19 @@ class CartRepository extends Controller implements CartInterface
     {
         $cart_id = Auth::user()->cart->id;
 
-        $productInCart = CartProduct::where('cart_id',$cart_id)->
-        where('product_id',$req['product_id'])->where('provider_shop_details_id',$req['shop_id'])->
-        whereJsonContains('variants',$req['variants'])->first();
+        if(isset($req['variants'])){
+            $productInCart = CartProduct::where('cart_id',$cart_id)->
+            where('product_id',$req['product_id'])->where('provider_shop_details_id',$req['shop_id'])->
+            whereJsonContains('variants',$req['variants'])->first();
+        }
+        else{
+            $productInCart = CartProduct::where('cart_id',$cart_id)->
+            where('product_id',$req['product_id'])->where('provider_shop_details_id',$req['shop_id'])->first();
+        }
+
 
         // $product=Product::findOrFail($req['product_id']);
-        
+
         if ($req['quantity'] == 0) {
 
             $productInCart->delete();
