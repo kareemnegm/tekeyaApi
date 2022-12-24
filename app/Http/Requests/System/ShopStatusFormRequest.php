@@ -28,4 +28,16 @@ class ShopStatusFormRequest extends BaseFormRequest
             'status'=>'required|in:suspended,approved'
         ];
     }
+
+          /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'status.in'=>' :attribute is used in approved,suspended',
+        ];
+    }
 }

@@ -111,7 +111,7 @@ class ShopController extends Controller
     {
         $data=$request->validated();
         $this->ProviderRepository->statusShop($data,$id);
-        return $this->successResponse('shop suspended', 200);
+        return $this->successResponse('shop status updated successful', 200);
     }
 
 
