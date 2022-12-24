@@ -11,7 +11,7 @@ interface ProviderInterface
     public function updateShopDetails($details, $id);
     public function getShopDetails($id);
     public function getShops();
-    public function suspendShop($id);
+    public function suspendShop($data,$id);
     // public function getShopByCategoryId($id, $details);
     /**
      * !branch section

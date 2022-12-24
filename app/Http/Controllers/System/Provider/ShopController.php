@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\ProviderShopFormRequest;
 use App\Http\Requests\Admin\ShopBranchFormRequest as AdminShopBranchFormRequest;
 use App\Http\Requests\Admin\UpdateShopDetailsFormRequest as AdminUpdateShopDetailsFormRequest;
 use App\Http\Requests\Provider\BranchIdFormRequest;
+use App\Http\Requests\System\ShopStatusFormRequest;
 use App\Http\Resources\Admin\ShopDetailsResource;
 use App\Http\Resources\Provider\ShopBranchResource;
 use App\Interfaces\Admin\ProviderInterface;
@@ -106,9 +107,10 @@ class ShopController extends Controller
     }
 
 
-    public function suspendShop($id)
+    public function suspendShop(ShopStatusFormRequest $request,$id)
     {
-        $this->ProviderRepository->suspendShop($id);
+        $data=$request->validated();
+        $this->ProviderRepository->suspendShop($data,$id);
         return $this->successResponse('shop suspended', 200);
     }
 

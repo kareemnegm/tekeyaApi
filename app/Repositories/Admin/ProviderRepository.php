@@ -68,9 +68,9 @@ class ProviderRepository implements ProviderInterface
     }
 
 
-    public function suspendShop($id)
+    public function suspendShop($data,$id)
     {
-        $shop = ProviderShopDetails::where('id', $id)->update(['status' => 'suspended']);
+        $shop = ProviderShopDetails::where('id', $id)->update(['status' => $data['status']]);
     }
 
 
