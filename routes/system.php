@@ -100,6 +100,7 @@ Route::post('search/category', 'CategoryController@CategorySearch');
 
 
 Route::get('orders', 'OrderController@ShopOrders');
+Route::get('order_details/{id}', 'OrderController@orderDetails');
 Route::put('order_shop', 'OrderController@AdminUpdateOrderDeliveryStatus');
 Route::get('finance_orders', 'OrderController@financeOrders');
 Route::get('finance_statistics', 'OrderController@financeStatistics');

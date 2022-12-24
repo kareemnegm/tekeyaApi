@@ -12,7 +12,16 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminOrderRepository implements AdminOrderInterface
 {
-    
+
+
+
+    public function orderDetails($orderId)
+    {
+
+        $order = OrderShop::where('order_id', $orderId)->firstOrFail();
+
+        return  $order;
+    }
     /**
      * Undocumented function
      *
@@ -27,29 +36,26 @@ class AdminOrderRepository implements AdminOrderInterface
             $q->where('shop_id', $shop_id);
         }
 
-        if (!isset($request['order_type']) || isset($request['order_type']) && $request['order_type'] == 'recent' ) {
+        if (!isset($request['order_type']) || isset($request['order_type']) && $request['order_type'] == 'recent') {
 
             $shopOrder = $q;
-        } elseif ( isset($request['order_type']) && $request['order_type'] == 'pickup') {
+        } elseif (isset($request['order_type']) && $request['order_type'] == 'pickup') {
 
             $shopOrder = $q->where('model_type', 'App\Models\OrderPickup');
-        } elseif ( isset($request['order_type']) && $request['order_type'] == 'delivery') {
+        } elseif (isset($request['order_type']) && $request['order_type'] == 'delivery') {
 
-        $shopOrder = $q->where('model_type', 'App\Models\OrderShipment');
+            $shopOrder = $q->where('model_type', 'App\Models\OrderShipment');
+        } elseif (isset($request['order_type']) && $request['order_type'] == 'rejected') {
 
-        } elseif(isset($request['order_type']) && $request['order_type'] == 'rejected') {
-
-            $shopOrder= $q->whereHas('deliveryType' , function($query) {
+            $shopOrder = $q->whereHas('deliveryType', function ($query) {
                 $query->where('order_shop_status', '=', 'rejected');
             });
-        }
-
-        elseif(isset($request['order_type']) && $request['order_type'] == 'canceled') {
-            $shopOrder= $q->whereHas('deliveryType' , function($query) {
+        } elseif (isset($request['order_type']) && $request['order_type'] == 'canceled') {
+            $shopOrder = $q->whereHas('deliveryType', function ($query) {
                 $query->where('order_user_status', '=', 'canceled');
             });
         }
-      
+
 
 
         if (isset($request['sort']) && !empty($request['sort'])) {
@@ -80,10 +86,10 @@ class AdminOrderRepository implements AdminOrderInterface
 
         if (isset($shop_id) && !empty($shop_id)) {
 
-         $shopOrder= $shopOrder->where('shop_id', $shop_id);
-         $total_Invoice= $shopOrder->where('shop_id', $shop_id);
+            $shopOrder = $shopOrder->where('shop_id', $shop_id);
+            $total_Invoice = $shopOrder->where('shop_id', $shop_id);
         }
-    
+
         return [
             'orders' => $shopOrder->count(),
             'income' => $total_Invoice->get()->sum('invoice.total_invoice'),

@@ -5,6 +5,7 @@ namespace App\Interfaces\Admin;
 interface AdminOrderInterface
 {
 
+    public function orderDetails($orderId);
     // /**
     //  * Undocumented function
     //  *

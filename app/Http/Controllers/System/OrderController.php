@@ -9,6 +9,7 @@ use App\Http\Requests\System\OrdersFormRequest;
 use App\Http\Requests\System\OrderShopIdFormRequest;
 use App\Http\Resources\Admin\AdminShopOrderResource;
 use App\Http\Resources\Admin\OrderResource;
+use App\Http\Resources\Provider\ProviderPlacedOrdersDetailsResource;
 use App\Interfaces\Admin\AdminOrderInterface;
 use App\Models\OrderShop;
 use Illuminate\Http\Request;
@@ -78,6 +79,13 @@ class OrderController extends Controller
         return $this->paginateCollection(OrderResource::collection($shopOrder), $request->limit, 'orders_shop_list');
     }
 
+
+
+
+    public function orderDetails($id)
+    {
+        return $this->dataResponse(['order_details'=>new ProviderPlacedOrdersDetailsResource($this->AdminOrderRepository->orderDetails($id))],'success',200);
+    }
 
 
     public function AdminUpdateOrderDeliveryStatus(OrderShopIdFormRequest $order_shop_id)
