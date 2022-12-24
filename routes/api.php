@@ -68,18 +68,17 @@ Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
 
     Route::post('update_user_id', function () {
 
-        $orders=Order::get();
-    
-        foreach($orders as $order){
-            $orderShop=OrderShop::where('order_id',$order->id)->update(['user_id'=>$order->user_id]);
-        }
-        $ordersShops=OrderShop::get();
+        $orders = Order::get();
 
-        foreach($ordersShops as $shop){
-            $shop->invoice->update(['user_id'=>$shop->user_id]);
+        foreach ($orders as $order) {
+            $orderShop = OrderShop::where('order_id', $order->id)->update(['user_id' => $order->user_id]);
+        }
+        $ordersShops = OrderShop::get();
+
+        foreach ($ordersShops as $shop) {
+            $shop->invoice->update(['user_id' => $shop->user_id]);
         }
         return 'done';
-
     });
     /**
      * signup
@@ -97,7 +96,7 @@ Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
 
     Route::get('send-mail', function () {
 
-        
+
 
         $details = [
             'title' => 'Tekya.com',
@@ -114,7 +113,7 @@ Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
      */
     Route::post('authentication', 'AuthController@authentication');
 
-     /**
+    /**
      * Adss Modules
      */
     Route::get('adds', 'AddsController@index');
@@ -141,7 +140,7 @@ Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
     Route::get('shop/branches', 'ShopController@getShopBranches');
     Route::get('shop/collections', 'ShopController@getShopCollections');
 
-    
+
 
 
     /**
