@@ -25,7 +25,7 @@ class CategorySearchFormRequest extends BaseFormRequest
     public function rules()
     {
         return [
-            'keyWord' => 'required'
+            'keyword' => 'required'
         ];
     }
 }

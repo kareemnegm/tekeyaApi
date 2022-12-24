@@ -16,6 +16,7 @@ class CategoryFormRequest extends BaseFormRequest
         return true;
     }
 
+    
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,8 +25,9 @@ class CategoryFormRequest extends BaseFormRequest
     public function rules()
     {
         return [
-           'name'=>'required|unique:categories,name',
-           'category_id'=>'exists:categories,id'
+           'name'=>'required|unique:categories,name,'.request()->route('category'),
+           'category_id'=>'nullable|exists:categories,id',
+           'category_icon'=>'nullable'
         ];
     }
 }

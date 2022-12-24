@@ -72,6 +72,8 @@ Route::group(['namespace' => 'Provider'], function () {
 });
 
 Route::apiResource('/category', 'CategoryController');
+Route::get ('/all_categories', 'CategoryController@getAllCategories');
+
 Route::apiResource('/deliveryOption', 'DeliveryOptionController');
 
 

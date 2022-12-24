@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CategorySearchFormRequest;
 use App\Http\Requests\CategoryFormRequest;
 use App\Http\Resources\Admin\CategorySearchResource;
+use App\Http\Resources\CategoryResource;
 use App\Interfaces\CategoryInterface;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -18,42 +19,93 @@ class CategoryController extends Controller
         $this->CategoryRepository = $CategoryRepository;
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param CategoryFormRequest $request
+     * @return void
+     */
     public function store(CategoryFormRequest $request)
     {
-        $details = $request->input();
+        $details = $request->validated();
         $data = $this->CategoryRepository->createCategory($details);
-        return $this->dataResponse(['category' => $data], 'OK', 200);
+        return $this->dataResponse(['category' => new CategoryResource($data)], 'OK', 200);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param CategoryFormRequest $request
+     * @param [type] $id
+     * @return void
+     */
     public function update(CategoryFormRequest $request, $id)
     {
-        $details = $request->input();
+        $details = $request->validated();
        $data= $this->CategoryRepository->updateCategory($details, $id);
         return $this->dataResponse(['category' => $data], 'OK', 200);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @return void
+     */
     public function index(Request $request)
     {
         return $this->paginateCollection($this->CategoryRepository->getCategories($request), $request->limit, 'category');
     }
 
+    
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function getAllCategories(Request $request)
+    {
+
+        
+        return $this->paginateCollection($this->CategoryRepository->getAllCategories($request), $request->limit, 'category');
+    }
+
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $id
+     * @return void
+     */
     public function destroy($id)
     {
         $this->CategoryRepository->deleteCategory($id);
         return $this->successResponse('deleted successfully', 200);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param [type] $id
+     * @return void
+     */
     public function show($id)
     {
         return $this->dataResponse(['category' => $this->CategoryRepository->getCategory($id)], 'OK', 200);
     }
 
 
+    /**
+     * Undocumented function
+     *
+     * @param CategorySearchFormRequest $request
+     * @return void
+     */
     public function CategorySearch(CategorySearchFormRequest $request)
     {
         $search = $request->validated();
-        $categorySearch = Category::where('name', 'LIKE', '%' . $search['keyWord'] . '%')->get();
-
-        return $this->paginateCollection(CategorySearchResource::collection($categorySearch), $request->limit, 'collection');
+        $categorySearch = Category::where('name', 'LIKE', '%' . $search['keyword'] . '%')->get();
+        return $this->paginateCollection(CategoryResource::collection($categorySearch), $request->limit, 'collection');
     }
 }

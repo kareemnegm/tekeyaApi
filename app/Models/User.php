@@ -79,13 +79,13 @@ class User extends Authenticatable  implements HasMedia
         return $this->hasOne(UserLocation::class);
     }
 
-    public function registerMediaConversions(Media $media = null): void
-    {
-        $this->addMediaConversion('thumb')
-            ->width(400)
-            ->height(600)
-            ->sharpen(0);
-    }
+public function registerMediaConversions(Media $media = null): void
+{
+    $this->addMediaConversion('thumb')
+        ->width(400)
+        ->height(600)
+        ->sharpen(0);
+}
     /**
      * The attributes that should be hidden for serialization.
      *

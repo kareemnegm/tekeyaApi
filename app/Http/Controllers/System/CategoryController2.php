@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CategorySearchFormRequest;
 use App\Http\Requests\CategoryFormRequest;
+use App\Http\Resources\Admin\CategorySearchResource;
 use App\Interfaces\CategoryInterface;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -15,9 +18,15 @@ class CategoryController extends Controller
         $this->CategoryRepository = $CategoryRepository;
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param CategoryFormRequest $request
+     * @return void
+     */
     public function store(CategoryFormRequest $request)
     {
-        $details = $request->validated();
+        $details = $request->input();
         $data = $this->CategoryRepository->createCategory($details);
         return $this->dataResponse(['category' => $data], 'OK', 200);
     }
@@ -68,5 +77,20 @@ class CategoryController extends Controller
     public function show($id)
     {
         return $this->dataResponse(['category' => $this->CategoryRepository->getCategory($id)], 'OK', 200);
+    }
+
+
+    /**
+     * Undocumented function
+     *
+     * @param CategorySearchFormRequest $request
+     * @return void
+     */
+    public function CategorySearch(CategorySearchFormRequest $request)
+    {
+        $search = $request->validated();
+        $categorySearch = Category::where('name', 'LIKE', '%' . $search['keyWord'] . '%')->get();
+
+        return $this->paginateCollection(CategorySearchResource::collection($categorySearch), $request->limit, 'collection');
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Classes\CategoryClass;
 use App\Classes\ProviderClass;
 use App\Classes\SearchClass;
 use App\Http\Controllers\User\SearchController;
@@ -44,6 +43,7 @@ use App\Models\OrderItem;
 use App\Observers\UpdateStockQuantity;
 use App\Repositories\Admin\AdminDeliveryCoverageRepository;
 use App\Repositories\Admin\AdminOrderRepository;
+use App\Repositories\Admin\CategoryRepository as AdminCategoryRepository;
 use App\Repositories\Admin\CollectionRepository as AdminCollectionRepository;
 use App\Repositories\Admin\CustomerRepository as AdminCustomerRepository;
 use App\Repositories\Admin\ProductRepository as AdminProductRepository;
@@ -63,13 +63,13 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(ProviderInterface::class, ProviderClass::class);
-        $this->app->bind(CategoryInterface::class, CategoryClass::class);
+        $this->app->bind(CategoryInterface::class, AdminCategoryRepository::class);
 
         $this->app->bind(CollectionInterface::class, CollectionRepository::class);
         $this->app->bind(ProductInterface::class, ProductRepository::class);
         $this->app->bind(CartInterface::class, CartRepository::class);
         $this->app->bind(BundelInterface::class, BundelRepository::class);
-        $this->app->bind(CategoryInterface::class, CategoryClass::class);
+        // $this->app->bind(CategoryInterface::class, CategoryClass::class);
         $this->app->bind(UserInterface::class, UserRepository::class);
         $this->app->bind(MessageInterface::class, MessageRepository::class);
         $this->app->bind(DeliveryCoverageInterface::class, DeliveryCoverageRepository::class);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SubCategoryResource extends JsonResource
@@ -17,6 +18,9 @@ class SubCategoryResource extends JsonResource
         return [
             'id'=>$this->id,
             'name'=>$this->name,
+            'category_icon' => $this->getFirstMediaUrl('category_icon','thumb'),
+            'created_at'=> $this->created_at ? Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('m-d-Y g:i A'):null,
+            'updated_at'=>$this->updated_at ? Carbon::createFromFormat('Y-m-d H:i:s', $this->updated_at)->format('m-d-Y g:i A'):null,
             'subCategory'=>SubCategoryResource::collection($this->subs)
         ];
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Category;
+namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryFormRequest;
@@ -17,11 +17,18 @@ class CategoryController extends Controller
 
     public function store(CategoryFormRequest $request)
     {
-        $details = $request->input();
+        $details = $request->validated();
         $data = $this->CategoryRepository->createCategory($details);
         return $this->dataResponse(['category' => $data], 'OK', 200);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param CategoryFormRequest $request
+     * @param [type] $id
+     * @return void
+     */
     public function update(CategoryFormRequest $request, $id)
     {
         $details = $request->input();
@@ -29,17 +36,35 @@ class CategoryController extends Controller
         return $this->dataResponse(['category' => $data], 'OK', 200);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @return void
+     */
     public function index(Request $request)
     {
         return $this->paginateCollection($this->CategoryRepository->getCategories($request), $request->limit, 'category');
     }
 
-    public function delete($id)
+    /**
+     * Undocumented function
+     *
+     * @param [type] $id
+     * @return void
+     */
+    public function destroy($id)
     {
         $this->CategoryRepository->deleteCategory($id);
         return $this->successResponse('deleted successfully', 200);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param [type] $id
+     * @return void
+     */
     public function show($id)
     {
         return $this->dataResponse(['category' => $this->CategoryRepository->getCategory($id)], 'OK', 200);
