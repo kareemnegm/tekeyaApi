@@ -42,7 +42,7 @@ Route::group(['prefix' => 'shop', 'namespace' => 'Provider'], function () {
     Route::post('/', 'ShopController@createShop');
     Route::post('/approve/{id}', 'ShopController@approverPendingStores');
     Route::get('/', 'ShopController@getShops');
-    Route::put('/status_shop/{id}', 'ShopController@suspendShop');
+    Route::put('/status_shop/{id}', 'ShopController@statusShop');
     Route::get('/{id}', 'ShopController@getShopDetails');
     Route::put('/{id}', 'ShopController@updateShopDetails');
     Route::post('/branch', 'ShopController@createBranch');
