@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Providers;
-
+use App\Classes\CategoryClass;
 use App\Classes\ProviderClass;
 use App\Classes\SearchClass;
 use App\Http\Controllers\User\SearchController;
@@ -64,6 +64,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(ProviderInterface::class, ProviderClass::class);
         $this->app->bind(CategoryInterface::class, AdminCategoryRepository::class);
+        $this->app->bind(CategoryInterface::class, CategoryClass::class);
 
         $this->app->bind(CollectionInterface::class, CollectionRepository::class);
         $this->app->bind(ProductInterface::class, ProductRepository::class);
@@ -97,8 +98,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AdminOrderInterface::class, AdminOrderRepository::class);
         $this->app->bind(AdminCustomerInterface::class, AdminCustomerRepository::class);
 
-        
-        
+
+
 
 
     }
