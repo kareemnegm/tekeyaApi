@@ -28,6 +28,8 @@ class OrderResource extends JsonResource
             'status' => $this->deliveryType->order_shop_status??null,
             'order_id' => $this->order_id,
             'order_shop_id' => $this->id,
+            'order_number' => $this->order->order_number,
+
         ];
     }
 }

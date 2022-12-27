@@ -18,9 +18,19 @@ class CustomerRepository implements CustomerInterface
     public function customerList($request)
     {
 
-         $customerOrders=User::orderBy('id','DESC')
-         ->withCount('orders')
+         $q=User::query();
+
+
+         if($request['keyword']){
+            $customerOrders=$q->Where(DB::raw("concat(first_name, ' ', last_name)"), 'LIKE', "%".$request['keyword']."%")
+            ->orWhere('mobile', 'LIKE', '%'.$request['keyword'].'%')->  orderBy('id','DESC')
+            ->withCount('orders')
             ->get();
+         }else{
+            $customerOrders=$q->orderBy('id','DESC')
+            ->withCount('orders')
+            ->get();
+         }
        
         return  $customerOrders;
         

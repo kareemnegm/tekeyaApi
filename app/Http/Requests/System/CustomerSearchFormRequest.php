@@ -25,7 +25,7 @@ class CustomerSearchFormRequest extends BaseFormRequest
     public function rules()
     {
         return [
-            'keyword'=>'required',
+            'keyword'=>'nullable',
             'page'=>'nullable',
             'limit'=>'nullable'
 

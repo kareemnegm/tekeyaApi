@@ -29,7 +29,7 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function customerList(Request $request)
+    public function customerList(CustomerSearchFormRequest $request)
     {     
 
        $customers= $this->customerRepository->customerList($request);
