@@ -142,6 +142,7 @@ class ShopController extends Controller
 
     public function getBranch($id)
     {
+        where(function($query) { $query->where('name', $q) ->orwhere('votes', '>', 50); });
         return $this->dataResponse(['branch' => new ShopBranchResource($this->ProviderRepository->getBranch($id))], 'success', 200);
     }
 
