@@ -48,9 +48,9 @@ class AuthController extends Controller
     public function login(UserLoginFormRequest $request)
     {
         if (isset($request->email) && !empty($request->email)) {
-            $user = User::where('email', $request->email)->first();
+            $user = User::where('email', $request->email)->whereNull('deleted_at')->first();
         } elseif (isset($request->mobile) && !empty($request->mobile)) {
-            $user = User::where('mobile', $request->mobile)->first();
+            $user = User::where('mobile', $request->mobile)->whereNull('deleted_at')->first();
         }
 
         $token = $user->createToken('UserToken')->plainTextToken;
