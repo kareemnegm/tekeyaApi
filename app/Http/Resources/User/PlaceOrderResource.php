@@ -17,8 +17,10 @@ class PlaceOrderResource extends JsonResource
     {
         return [
 
-            "order_number"=>$this->order_number,
+            "order_id"=>$this->id,
 
+            "order_number"=>$this->order_number,
+            
             'date_order_placed' => $this->date_order_placed ? 
             Carbon::createFromFormat('Y-m-d H:i:s', $this->date_order_placed)->format('m-d-Y g:i A') : null,
 
