@@ -28,7 +28,7 @@ class UserCancelOrderFromRequest extends BaseFormRequest
     {
         return [
             'order_id' => ['required',Rule::exists('orders','id')->where('user_id',auth('user')->user()->id),new UserOrderCancelRule($request)],
-            'status' => 'required|in:cancel'
+            'status' => 'required|in:canceled'
         ];
     }
 }
