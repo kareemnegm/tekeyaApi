@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Message;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MessageFormRequest;
 use App\Interfaces\MessageInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class MessageController extends Controller
         $this->MessageRepository = $MessageRepository;
     }
 
-    public function sendMessage(Request $request)
+    public function sendMessage(MessageFormRequest $request)
     {
         $data = $request->input();
            $data['user_id'] = Auth::user()->id;
@@ -27,9 +28,10 @@ class MessageController extends Controller
 
     public function ProviderRetrieveMessages(Request $request)
     {
-        $data=$request;
+        $limit = $request['limit'] ? $request['limit'] : 10;
         $data['shop_id']=Auth::user()->providerShopDetails->id;
-      return  $this->MessageRepository->Messages($data);
+      $messages=  $this->MessageRepository->Messages($data);
+      return $this->paginateCollection($messages,$limit,'messages');
 
-        }  
+        }
 }

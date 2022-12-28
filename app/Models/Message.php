@@ -12,6 +12,8 @@ class Message extends Model
         'user_id',
         'shop_id',
         'title',
+        'date',
+        'day',
         'message',
 
     ];

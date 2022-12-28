@@ -106,7 +106,7 @@ Route::get('finance_orders', 'OrderController@financeOrders');
 Route::get('finance_statistics', 'OrderController@financeStatistics');
 
 /**
- * Custoemers
+ * Customers
  */
 
 Route::group(['prefix' => 'customer', 'namespace' => 'Provider'], function () {

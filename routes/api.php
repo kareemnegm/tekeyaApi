@@ -29,9 +29,9 @@ Route::group(['namespace' => 'Provider\GovernmentArea'], function () {
 Route::apiResource('delivery_option', 'DeliveryOptionController');
 
 
-Route::group(['prefix' => 'user/message', 'namespace' => 'Message', 'middleware' => 'auth:user'], function () {
+Route::group(['prefix' => 'user/support', 'namespace' => 'Message', 'middleware' => 'auth:user'], function () {
 
-    Route::post('/', 'MessageController@sendMessage');
+    Route::post('send-message', 'MessageController@sendMessage');
 });
 
 Route::group(['prefix' => 'provider/message', 'namespace' => 'Message', 'middleware' => 'auth:provider'], function () {

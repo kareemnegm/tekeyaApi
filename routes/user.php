@@ -46,3 +46,5 @@ Route::group(['prefix' => 'order'], function () {
     Route::get('order_details', 'OrderController@orderDetiels');
     Route::post('cancel', 'OrderController@cancelOrder');
 });
+
+
