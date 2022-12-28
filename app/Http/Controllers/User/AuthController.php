@@ -53,6 +53,7 @@ class AuthController extends Controller
             $user = User::where('mobile', $request->mobile)->whereNull('deleted_at')->first();
         }
 
+
         $token = $user->createToken('UserToken')->plainTextToken;
 
         if (isset($user->email) && isset($user->first_name) && isset($user->last_name)) {
@@ -62,6 +63,7 @@ class AuthController extends Controller
         }
 
         return $this->dataResponse(['user' => $user, 'complete_profile' => $complete_profile, 'token' => $token], 'success', 200);
+        
     }
 
     public function logout()
