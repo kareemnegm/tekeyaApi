@@ -24,13 +24,31 @@ class ProductsShopFormRequest extends BaseFormRequest
      */
     public function rules()
     {
-        
-        return [
-            'shop_id' => 'required|exists:provider_shop_details,id',
-            // 'area_id'=>'nullable|exists:areas,id',
-            'category_id' => 'nullable|exists:categories,id',
-            'collection_id' => ['nullable',Rule::exists('collections', 'id')->where('shop_id',request()->shop_id)  ],
 
+
+        if (!auth('user')->check()) {
+            return [
+                'area_id' => 'required_without:latitude,longitude|exists:areas,id',
+                'latitude' => ['required_if:sortBy,==,nearest', 'required_without:area_id', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
+                'longitude' => ['required_if:sortBy,==,nearest', 'required_without:area_id', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
+                'sortBy' => 'nullable|in:nearest,alphabetical,price,newest',
+                'sort' => 'nullable|in:asc,desc',
+                'filter' => 'nullable|in:category',
+                'category_id' => 'required_if:filter,==,category',
+                'shop_id' => 'required|exists:provider_shop_details,id',
+                'collection_id' => ['nullable', Rule::exists('collections', 'id')->where('shop_id', request()->shop_id)],
+
+            ];
+        }
+
+
+        return [
+            'sortBy' => 'nullable|in:nearest,alphabetical,price,newest',
+            'sort' => 'nullable|in:asc,desc',
+            'filter' => 'nullable|in:category',
+            'category_id' => 'required_if:filter,==,category',
+            'shop_id' => 'required|exists:provider_shop_details,id',
+            'collection_id' => ['nullable', Rule::exists('collections', 'id')->where('shop_id', request()->shop_id)],
         ];
     }
 }

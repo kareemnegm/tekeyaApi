@@ -79,12 +79,27 @@ class ShopRepository extends Controller implements ShopInrerface
         $q = $shop->products()->where('is_published',1);
 
 
-        if(isset($request->category_id)){
-            $q->where('category_id',$request->category_id);
-        }
-
         if(isset($request->collection_id)){
             $q->where('collection_id',$request->collection_id);
+        }
+
+        if (isset($request['filter']) && $request['filter'] == 'category') {
+            $q->where('category_id', $request['category_id']);
+        }
+        if (isset($request['sortBy']) && $request['sortBy'] == 'newest') {
+            $q->orderBy('created_at', 'desc');
+        }
+
+        if (isset($request['sortBy']) && $request['sortBy'] == 'alphabetical') {
+            $q->orderBy('name', isset($request['sort']) ? $request['sort'] : 'asc');
+        }
+
+        if (isset($request['sortBy']) && $request['sortBy'] == 'price') {
+            $q->orderBy('price', isset($request['sort']) ? $request['sort'] : 'desc');
+        }
+        if (isset($request['sortBy']) && $request['sortBy'] == 'nearest') {
+
+            $q->productByDistance($request['latitude'], $request['longitude']);
         }
 
         $products = $q->orderBy('order', 'ASC')->get();
