@@ -13,10 +13,11 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable  implements HasMedia
 {
-    use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia, FileTrait ,SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia, FileTrait ,SoftDeletes ,HasRoles;
 
     protected $dates = ['deleted_at'];
 

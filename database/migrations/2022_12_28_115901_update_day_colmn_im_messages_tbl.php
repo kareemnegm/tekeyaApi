@@ -13,9 +13,9 @@ class UpdateDayColmnImMessagesTbl extends Migration
      */
     public function up()
     {
-        Schema::table('messages', function (Blueprint $table) {
-            $table->dropColumn('day');
-        });
+        // Schema::table('messages', function (Blueprint $table) {
+        //     $table->dropColumn('day');
+        // });
     }
 
     /**

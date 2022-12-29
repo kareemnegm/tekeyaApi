@@ -103,6 +103,8 @@ class providerShopBranch extends Model
     }
     public function scopeByDistance($query, $latitude, $longitude, $shopIDs = null, $distance = null, $unit = "km")
     {
+
+        
         $distance = 30;
         $constant = $unit == "km" ? 6371 : 3959;
 

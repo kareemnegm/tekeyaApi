@@ -13,9 +13,9 @@ class AddDayColmnImMessagesTbl extends Migration
      */
     public function up()
     {
-        Schema::table('messages', function (Blueprint $table) {
-            $table->string('day');
-        });
+        // Schema::table('messages', function (Blueprint $table) {
+        //     $table->string('day');
+        // });
     }
 
     /**

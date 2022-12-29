@@ -166,6 +166,8 @@ return [
          * Package Service Providers...
          */
         LaravelFCM\FCMServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
