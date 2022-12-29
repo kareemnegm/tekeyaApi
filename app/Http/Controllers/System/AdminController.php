@@ -10,6 +10,7 @@ use App\Models\Admin;
 use App\Models\ProviderShopDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
 
 class AdminController extends Controller
 {
@@ -36,22 +37,16 @@ class AdminController extends Controller
     public function deactivateAdminAccount($id)
     {
         $superAdmin = Auth::user();
-        if ($superAdmin->type == 'super_admin') {
-            $admin = Admin::findOrFail($id);
-            $admin->update(['status' => 'deactivated']);
-            return $this->successResponse('success', 200);
-        }
-        return $this->errorResponseWithMessage('Unauthorized', 401);
+        $admin = Admin::findOrFail($id);
+        $admin->update(['status' => 'deactivated']);
+        return $this->successResponse('success', 200);
     }
     public function activateAdminAccount($id)
     {
         $superAdmin = Auth::user();
-        if ($superAdmin->type == 'super_admin') {
-            $admin = Admin::findOrFail($id);
-            $admin->update(['status' => 'active']);
-            return $this->successResponse('success', 200);
-        }
-        return $this->errorResponseWithMessage('Unauthorized', 401);
+        $admin = Admin::findOrFail($id);
+        $admin->update(['status' => 'active']);
+        return $this->successResponse('success', 200);
     }
 
     /**
@@ -72,6 +67,25 @@ class AdminController extends Controller
         $data = $request->validated();
         $data['password'] = bcrypt($data['password']);
         $operation = Admin::create($data);
+        $roleOperation = Role::where('name', 'operation')->first();
+        $operation->assignRole($roleOperation);
+
         return $this->dataResponse(['operation' => new AdminsResource($operation)], 'success', 201);
+    }
+
+    public function UpdateOperation(UpdateAdminFormRequest $request, $id)
+    {
+        $data = $request->validated();
+        $operation = Admin::find($id);
+        $operation->update($data);
+        return $this->dataResponse(['operation' => new AdminsResource($operation)], 'success', 200);
+    }
+
+
+    public function deleteOperation($id)
+    {
+        $operation = Admin::find($id);
+        $operation->delete();
+        return $this->successResponse('success', 200);
     }
 }

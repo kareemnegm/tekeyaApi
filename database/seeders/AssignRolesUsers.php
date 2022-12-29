@@ -30,7 +30,7 @@ class AssignRolesUsers extends Seeder
 
         if($admins){
             foreach($admins as $admin){
-                $roleAdmin = Role::where('name','admin')->first();
+                $roleAdmin = Role::where('name','super_admin')->first();
                 $admin->assignRole($roleAdmin);
             }
         }

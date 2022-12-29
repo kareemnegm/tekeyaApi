@@ -16,10 +16,11 @@ class PermissionTableSeeder extends Seeder
     public function run()
     {
 
-        $permissionsAdmin = config('acl.admin_permission');
+        $permissionsAdmin = config('acl.super_admin_permission');
+        $permissionsOperation = config('acl.operation_permission');
         $permissionsProvider = config('acl.provider_permission');
 
-        $permissions=array_merge($permissionsAdmin,$permissionsProvider);
+        $permissions=array_merge($permissionsAdmin,$permissionsProvider,$permissionsOperation);
 
         $allPermissions = [];
         foreach ($permissions as $per) {

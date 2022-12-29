@@ -14,26 +14,26 @@ class AdminRolePermissionSeeder extends Seeder
      */
     public function run()
     {
-        $role=Role::where('name','admin')->first();
-         
+        $role=Role::where('name','super_admin')->first();
+
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-   
-   
-   
-    $permissions = config('acl.admin_permission');
+
+
+
+    $permissions = config('acl.super_admin_permission');
       $allPermissions = [];
       foreach ($permissions as $per) {
           foreach ($per as $item) {
               $allPermissions[] = $item;
           }
       }
-      
-      
-      
+
+
+
        foreach($allPermissions as $permission){
           $role->givePermissionTo($permission);
       }
     }
-    
+
 }
