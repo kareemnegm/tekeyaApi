@@ -15,7 +15,7 @@ class Provider extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable,SoftDeletes , HasRoles;
 
     protected $dates = ['deleted_at'];
-    protected $guard_name = "api";
+    protected $guard_name = "provider";
 
 
     protected $fillable = [
