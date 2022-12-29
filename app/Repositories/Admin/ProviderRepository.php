@@ -48,7 +48,9 @@ class ProviderRepository implements ProviderInterface
         if (isset($details['category_id'])) {
             $shopProvider->category()->sync($details['category_id']);
         }
+        if(isset($branch_id)){
         $this->updateBranch($details, $branch_id->id);
+        }
     }
 
 

@@ -168,7 +168,7 @@ class OrderRepository extends Controller implements OrderInterface
                 }
 
 
-                $shopShpping = 30;
+                $shopShpping = ;
                 $totalShipping += $shopShpping;
 
                 $orderShopInvoice = [

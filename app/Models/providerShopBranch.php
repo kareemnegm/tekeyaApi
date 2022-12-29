@@ -77,6 +77,8 @@ class providerShopBranch extends Model
     }
 
 
+    
+
 
 
     public function scopeShopsCategoryByDistance($query, $latitude, $longitude, $shopIDs , $distance = null, $unit = "km")
@@ -92,7 +94,9 @@ class providerShopBranch extends Model
                 + sin(radians(" . $latitude . ")) * sin(radians(`latitude`))
             )
         )";
-            return providerShopBranch::with('shop')->whereIn('shop_id', $shopIDs)->with('shop')->select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"),'latitude','longitude')
+            return providerShopBranch::with('shop')->whereHas('shop', function ($query) {
+                $query->whereHas('products');
+            })->whereIn('shop_id', $shopIDs)->with('shop')->select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"),'latitude','longitude')
                 ->having("distance", "<=", $distance)
                 ->orderby("distance", "asc")->get();
         
@@ -117,11 +121,19 @@ class providerShopBranch extends Model
             )
         )";
         if (!empty($shopIDs)) {
-            return providerShopBranch::with('shop')->whereIn('shop_id', $shopIDs)->select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"),'latitude','longitude')
+            return providerShopBranch::
+            with('shop')->whereHas('shop', function ($query) {
+                $query->whereHas('products');
+            })->
+            whereIn('shop_id', $shopIDs)->select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"),'latitude','longitude')
                 ->having("distance", "<=", $distance)
                 ->orderby("distance", "asc")->get();
         } else {
-            return providerShopBranch::select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"), 'latitude', 'longitude')
+            return providerShopBranch::
+            with('shop')->whereHas('shop', function ($query) {
+                $query->whereHas('products');
+            })->
+            select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"), 'latitude', 'longitude')
                 ->having("distance", "<=", $distance)
                 ->orderby("distance", "asc")->get();
         }
@@ -154,10 +166,15 @@ class providerShopBranch extends Model
             )
         )";
         if (!empty($shopIDs)) {
-            return providerShopBranch::with('shop')->whereIn('shop_id', $shopIDs)->select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"),'latitude','longitude')
+            return providerShopBranch::
+            with('shop')->whereHas('shop', function ($query) {
+                $query->whereHas('products');
+            })->whereIn('shop_id', $shopIDs)->select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"),'latitude','longitude')
                 ->orderby("distance", "asc")->get();
         } else {
-            return  providerShopBranch::with('shop')->select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"),'latitude','longitude')
+            return  providerShopBranch::with('shop')->whereHas('shop', function ($query) {
+                $query->whereHas('products');
+            })->select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"),'latitude','longitude')
                 ->orderby("distance", "asc")->get();
         }
     }

@@ -104,6 +104,7 @@ class ShopController extends Controller
         }
 
         $shopsProducts = $this->shopRepository->shopsProducts($data);
+
         return $this->paginateCollection(ShopsProductsResoruce::collection($shopsProducts), $request->limit, 'shops');
     }
 
