@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\AdminFormRequest;
 use App\Http\Requests\Admin\UpdateAdminFormRequest;
 use App\Http\Resources\Admin\AdminsResource;
 use App\Models\Admin;
@@ -66,26 +67,11 @@ class AdminController extends Controller
         return $this->dataResponse(['admin' => new AdminsResource($admin)], 'success', 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function addOperation(AdminFormRequest $request)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $data = $request->validated();
+        $data['password'] = bcrypt($data['password']);
+        $operation = Admin::create($data);
+        return $this->dataResponse(['operation' => new AdminsResource($operation)], 'success', 201);
     }
 }

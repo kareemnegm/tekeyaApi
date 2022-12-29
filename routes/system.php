@@ -72,7 +72,7 @@ Route::group(['namespace' => 'Provider'], function () {
 });
 
 Route::apiResource('/category', 'CategoryController');
-Route::get ('/all_categories', 'CategoryController@getAllCategories');
+Route::get('/all_categories', 'CategoryController@getAllCategories');
 
 Route::apiResource('/deliveryOption', 'DeliveryOptionController');
 
@@ -113,5 +113,16 @@ Route::group(['prefix' => 'customer', 'namespace' => 'Provider'], function () {
     Route::get('list', 'CustomerController@customerList');
     Route::get('show/{userId}', 'CustomerController@customerDetails');
     Route::get('search', 'CustomerController@customersSearch');
+});
 
+
+
+/**
+ * operations
+ */
+
+Route::group(['prefix' => 'operation', 'namespace' => 'System'], function () {
+    Route::post('add', 'AdminController@addOperation');
+    Route::get('show/{userId}', 'CustomerController@customerDetails');
+    Route::get('search', 'CustomerController@customersSearch');
 });

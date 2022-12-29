@@ -27,7 +27,7 @@ class AdminFormRequest extends BaseFormRequest
         return [
             'email' => 'required|email|unique:admins,email',
             'password' => 'required',
-            'type' => 'nullable|in:super_admin,admin',
+            'type' => 'nullable|in:super_admin,operation',
             'mobile_no' => 'numeric'
         ];
     }
