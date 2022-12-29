@@ -38,6 +38,7 @@ class UpdateShopDetailsFormRequest extends BaseFormRequest
             "payment_option_id.*" => 'required|exists:payment_options,id',
             'delivery' => 'in:1,0',
             'pick_up' => 'in:1,0',
+            'is_tekeya_delivery'=> 'nullable|in:1,0',
 
 
         ];

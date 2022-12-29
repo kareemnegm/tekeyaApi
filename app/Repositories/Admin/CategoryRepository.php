@@ -61,8 +61,15 @@ class CategoryRepository implements CategoryInterface
      */
     public function getCategories($details)
     {
+        $q=Category::query();
 
-        return CategoryResource::collection(Category::where('category_id', null)->with('children')->get());
+       if($details['keyword']){
+       $categoies=$q->where('name', 'LIKE', '%' . $details['keyword'] . '%')->with('children')->get();
+       }else{
+        $categoies=$q->where('category_id', null)->with('children')->get();
+       }
+
+        return CategoryResource::collection($categoies);
     }
 
     /**

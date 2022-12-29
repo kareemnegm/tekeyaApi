@@ -162,4 +162,6 @@ class ShopController extends Controller
         $this->ProviderRepository->deleteBranch($id);
         return $this->successResponse('deleted successful', 200);
     }
+
+  
 }

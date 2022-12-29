@@ -41,6 +41,7 @@ class ProviderRepository implements ProviderInterface
             $shopDetails->saveFiles($details['shop_cover'], 'shop_cover');
         }
 
+        // dd($details);
         $shopDetails->update($details);
         $shopProvider = ProviderShopDetails::find($shopDetails->id);
 

@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\User;
-
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductsShopFormRequest;
 use App\Http\Requests\User\NewShopsFormRequest;
@@ -44,7 +42,6 @@ class ShopController extends Controller
     {
         $this->shopRepository = $shopRepository;
 
-
     }
 
     /**
@@ -82,7 +79,7 @@ class ShopController extends Controller
         $data= $this->userArea($data);
 
         if(!isset($data['latitude']) && !isset($data['longitude'])){
-            return $this->errorResponseWithMessage('User not have any area location or lat and long',422);
+           return $this->errorResponseWithMessage('User not have any area location or lat and long',422);
         }
 
         $newShops = $this->shopRepository->newShops($data);

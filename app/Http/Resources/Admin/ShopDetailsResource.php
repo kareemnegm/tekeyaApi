@@ -33,7 +33,9 @@ class ShopDetailsResource extends JsonResource
             'delivery' => $this->branches ? $this->branches()->first()->delivery:null,
             'pick_up' => $this->branches ? $this->branches()->first()->pick_up:null,
             'provider' => new ProviderResource($this->provider),
-            'status' => $this->status
+            'status' => $this->status,
+            'is_tekeya_delivery' => $this->is_tekeya_delivery
+
         ];
     }
 }
