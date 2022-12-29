@@ -9,39 +9,78 @@ use App\Models\Category;
 
 class CategoryClass implements CategoryInterface
 {
+     /**
+     * Undocumented function
+     *
+     * @param [type] $details
+     * @return void
+     */
     public function createCategory($details)
     {
-        return Category::create($details);
-    }
+        $category=Category::create($details);
 
-    public function UpdateCategory($details, $id)
-    {
-        $category = Category::findOrFail($id);
-        $category->update($details);
+        if (isset($details['category_icon'])) {
+            $category->saveFiles($details['category_icon'], 'category_icon');
+        }
+
         return $category;
     }
 
-    public function getCategories($details)
-    {
 
-        return CategoryResource::collection(Category::where('category_id', null)->with('children')->get());
-    }
-
-    public function deleteCategory($id)
+    /**
+     * Undocumented function
+     *
+     * @param [type] $details
+     * @param [type] $id
+     * @return void
+     */
+    public function updateCategory($details, $id)
     {
         $category = Category::findOrFail($id);
-        $category->delete();
+
+        $category->update($details);
+
+        if (isset($details['category_icon'])) {
+
+            if ($category->getMedia('category_icon')) {
+
+                $category->clearMediaCollectionExcept(' ');
+            }
+
+            $category->saveFiles($details['category_icon'], 'category_icon');
+        }
+    
+        return $category;
     }
 
-    public function getCategory($id)
+    /**
+     * Undocumented function
+     *
+     * @param [type] $details
+     * @return void
+     */
+    public function getCategories($details)
     {
-        return  new CategoryResource(Category::findOrFail($id));
+        $q=Category::query();
+
+       if($details['keyword']){
+       $categoies=$q->where('name', 'LIKE', '%' . $details['keyword'] . '%')->with('children')->get();
+       }else{
+        $categoies=$q->where('category_id', null)->with('children')->get();
+       }
+
+        return CategoryResource::collection($categoies);
     }
 
-
+    /**
+     * Undocumented function
+     *
+     * @param [type] $details
+     * @return void
+     */
     public function getAllCategories($details)
     {
-
+        
         $q=Category::query();
 
        if($details['keyword']){
@@ -51,6 +90,29 @@ class CategoryClass implements CategoryInterface
        }
 
         return AllCategoryResource::collection($categoies);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $id
+     * @return void
+     */
+    public function deleteCategory($id)
+    {
+        $category = Category::findOrFail($id);
+        $category->delete();
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $id
+     * @return void
+     */
+    public function getCategory($id)
+    {
+        return  new CategoryResource(Category::findOrFail($id));
     }
 
 }
