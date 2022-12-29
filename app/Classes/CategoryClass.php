@@ -68,7 +68,7 @@ class CategoryClass implements CategoryInterface
        }else{
         $categoies=$q->where('category_id', null)->with('children')->get();
        }
-
+       
         return CategoryResource::collection($categoies);
     }
 
