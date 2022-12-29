@@ -28,8 +28,8 @@ class ProviderShopDetails extends Model implements HasMedia
         'provider_id',
         'admin_id',
         'status',
-        'vat'
-
+        'vat',
+        'is_tekeya_delivery'
     ];
 
 
