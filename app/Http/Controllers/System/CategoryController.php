@@ -5,6 +5,7 @@ namespace App\Http\Controllers\System;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CategorySearchFormRequest;
 use App\Http\Requests\CategoryFormRequest;
+use App\Http\Requests\ListFormRequest;
 use App\Http\Resources\Admin\CategorySearchResource;
 use App\Http\Resources\CategoryResource;
 use App\Interfaces\CategoryInterface;
@@ -52,7 +53,7 @@ class CategoryController extends Controller
      * @param Request $request
      * @return void
      */
-    public function index(Request $request)
+    public function index(ListFormRequest $request)
     {
         return $this->paginateCollection($this->CategoryRepository->getCategories($request), $request->limit, 'category');
     }
@@ -64,7 +65,7 @@ class CategoryController extends Controller
      * @param Request $request
      * @return void
      */
-    public function getAllCategories(Request $request)
+    public function getAllCategories(ListFormRequest $request)
     {
 
         
