@@ -168,9 +168,10 @@ class ShopRepository extends Controller implements ShopInrerface
      */
     public function getShopCollections($shop_id)
     {
+        $limit=isset($request['limit']) ? $request['limit']:10;
 
 
-        $collections=Collection::where('shop_id',$shop_id)->where('is_published',1)->get();
+        $collections=Collection::where('shop_id',$shop_id)->where('is_published',1)->paginate($limit);
 
         return $collections;
 
