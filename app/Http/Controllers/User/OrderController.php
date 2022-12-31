@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ListFormRequest;
 use App\Http\Requests\User\OrderDetielsRequest;
 use App\Http\Requests\User\OrderReviewFormRequest;
 use App\Http\Requests\User\PlaceOrderFormRequest;
@@ -70,7 +71,7 @@ class OrderController extends Controller
      * @param Request $request
      * @return void
      */
-    public function myOrderList(Request $request)
+    public function myOrderList(ListFormRequest $request)
     {
         $orders=$this->orderRepository->myOrderList($request);
 
