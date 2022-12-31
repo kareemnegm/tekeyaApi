@@ -174,6 +174,7 @@ class Product extends Model implements HasMedia
     {
         $distance = 30;
         $constant = $unit == "km" ? 6371 : 3959;
+        $limit=isset(request()->limit) ? request()->limit :10;
 
         $haversine = "(
             6371 * acos(
@@ -187,7 +188,7 @@ class Product extends Model implements HasMedia
       return  $query->whereHas('shop.branches', function ($q) use($haversine,$distance) {
              $q->select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"),'latitude','longitude')
                 ->having("distance", "<=", $distance);
-            })->get();
+            })->paginate($limit);
            
     }
     
