@@ -34,7 +34,7 @@ class SaleRepository implements SaleInterface
 
     public function shopSales($shop_id)
     {
-        $sales = Sale::where('shop_id', $shop_id)->get();
+        $sales = Sale::where('shop_id', $shop_id)->paginate();
         return $sales;
     }
 

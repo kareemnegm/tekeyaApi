@@ -23,13 +23,13 @@ class CustomerRepository implements CustomerInterface
     {
 
         $shop_id = auth('provider')->user()->providerShopDetails->id;
+        $limit=isset($request['limit']) ? $request['limit'] : 10;
 
          $customerOrders=OrderShop::where('shop_id',$shop_id)
         ->select('user_id', DB::raw('count(*) as total'))
         ->orderBy('total','DESC')
         ->groupBy('user_id')
-
-        ->get();
+        ->paginate($limit);
 
         return  $customerOrders;
         
@@ -41,12 +41,14 @@ class CustomerRepository implements CustomerInterface
      * @param [type] $projectId
      * @return void
      */
-    public function customerOrderDetails($user_id)
+    public function customerOrderDetails($request,$user_id)
     {
+        $limit=isset($request['limit']) ? $request['limit'] : 10;
+
         $shop_id = auth('provider')->user()->providerShopDetails->id;
 
         $shopOrder = OrderShop::where('user_id',$user_id)->where('shop_id', $shop_id)->with('order')->
-        with('invoice')->withSum('orderItems', 'quantity')->get();
+        with('invoice')->withSum('orderItems', 'quantity')->paginate($limit);
 
         return $shopOrder;
 

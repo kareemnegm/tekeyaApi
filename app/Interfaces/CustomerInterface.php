@@ -20,6 +20,6 @@ interface CustomerInterface
      * @param [type] $collectionID
      * @return void
      */
-    public function customerOrderDetails($collectionID);
+    public function customerOrderDetails($request,$collectionID);
  
 }

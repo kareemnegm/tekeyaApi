@@ -24,6 +24,8 @@ class ProductRepository implements ProductInterface
     {
 
         $q = Product::query();
+        
+        $limit=isset($request['limit']) ? $request['limit'] : 10;
 
         $q->where('shop_id', auth('provider')->user()->providerShopDetails->id);
 
@@ -39,9 +41,9 @@ class ProductRepository implements ProductInterface
         }
 
         if (isset($request->sortBy) && isset($request->filter)) {
-            $collections = $q->orderBy($request->filter, $request->sortBy)->get();
+            $collections = $q->orderBy($request->filter, $request->sortBy)->paginate($limit);
         } else {
-            $collections = $q->orderBy('order', 'ASC')->get();
+            $collections = $q->orderBy('order', 'ASC')->paginate($limit);
         }
 
         return $collections;
@@ -54,6 +56,7 @@ class ProductRepository implements ProductInterface
      */
     public function getAllShopCollectionProduct($request, $collectionId)
     {
+        $limit=isset($request['limit']) ? $request['limit'] : 10;
 
         $q = Product::query();
 
@@ -67,9 +70,9 @@ class ProductRepository implements ProductInterface
 
         if (isset($request->sortBy) && isset($request->filter)) {
 
-            $collections = $q->orderBy($request->filter, $request->sortBy)->get();
+            $collections = $q->orderBy($request->filter, $request->sortBy)->paginate($limit);
         } else {
-            $collections = $q->orderBy('order', 'ASC')->get();
+            $collections = $q->orderBy('order', 'ASC')->paginate($limit);
         }
 
         return $collections;
@@ -211,6 +214,8 @@ class ProductRepository implements ProductInterface
         $products = Product::where('name', 'like', '%' . $request['search'] . '%')->where('shop_id', $request['shop_id']);
         $products->where('shop_id', auth('provider')->user()->providerShopDetails->id);
 
+        $limit=isset($request['limit']) ? $request['limit'] : 10;
+
         if ($request->is_published) {
             $is_publish = $request->is_published == 'true' ? 1 : 0;
             $products->where('is_published', $is_publish);
@@ -222,9 +227,9 @@ class ProductRepository implements ProductInterface
             $products->where('collection_id',null);
         }
         if (isset($request->sortBy) && isset($request->filter)) {
-            $collections = $products->orderBy($request->filter, $request->sortBy)->get();
+            $collections = $products->orderBy($request->filter, $request->sortBy)->paginate($limit);
         } else {
-            $collections = $products->orderBy('order', 'ASC')->get();
+            $collections = $products->orderBy('order', 'ASC')->paginate($limit);
         }
 
         return $collections;
@@ -238,6 +243,9 @@ class ProductRepository implements ProductInterface
         $collection = Collection::where('name', 'like', '%' . $request['search'] . '%')->where('shop_id',auth('provider')->user()->providerShopDetails->id);
 
 
+        $limit=isset($request['limit']) ? $request['limit'] : 10;
+
+
         if ($request->is_published) {
             $is_publish = $request->is_published == 'true' ? 1 : 0;
 
@@ -245,9 +253,9 @@ class ProductRepository implements ProductInterface
         }
 
         if (isset($request->sortBy) && isset($request->filter)) {
-            $collections = $collection->orderBy($request->filter, $request->sortBy)->get();
+            $collections = $collection->orderBy($request->filter, $request->sortBy)->paginate($limit);
         } else {
-            $collections = $collection->orderBy('order', 'ASC')->get();
+            $collections = $collection->orderBy('order', 'ASC')->paginate($limit);
         }
 
         return $collections;

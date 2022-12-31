@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Provider;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ListFormRequest;
 use App\Http\Requests\Provider\CustomerOrderDetailRequest;
 use App\Http\Resources\Proivder\CustomerOrderDetailsResource;
 use App\Http\Resources\Proivder\CustomerOrderListResource;
@@ -28,9 +29,9 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function customersList(Request $request)
+    public function customersList(ListFormRequest $request)
     {
-        $customerOrdersList = $this->customerInterface->customerOrdersList($request);
+        $customerOrdersList = $this->customerInterface->customerOrdersList($request->validated());
         return $this->paginateCollection(CustomerOrderListResource::collection($customerOrdersList), $request->limit, 'customers_orders');
 //
     }
@@ -46,7 +47,7 @@ class CustomerController extends Controller
     public function customerOrder(CustomerOrderDetailRequest $request)
     {
         $data=$request->validated();
-        $customerOrderDetails = $this->customerInterface->customerOrderDetails($data['user_id']);
+        $customerOrderDetails = $this->customerInterface->customerOrderDetails($data,$data['user_id']);
         return $this->paginateCollection(CustomerOrderDetailsResource::collection($customerOrderDetails), $request->limit, 'customer_orders_details');
 
     }

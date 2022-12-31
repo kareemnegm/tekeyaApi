@@ -20,6 +20,8 @@ class CollectionRepository implements CollectionInterface
         // $limit = $request->limit ? $request->limit : 10;
 
         $q = Collection::query();
+        
+        $limit=isset($request['limit']) ? $request['limit'] : 10;
 
         $shopId = auth('provider')->user()->providerShopDetails->id;
         $q->where('shop_id', $shopId);
@@ -34,7 +36,7 @@ class CollectionRepository implements CollectionInterface
         // if ($request->page) {
         //     $collections = $q->paginate($limit);
         // } else {
-        $collections = $q->get();
+        $collections = $q->paginate($limit);
         // }
 
         return $collections;

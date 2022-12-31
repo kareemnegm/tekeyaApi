@@ -26,7 +26,8 @@ class CustomerOrderDetailRequest extends BaseFormRequest
     {
         return [
             'user_id' => 'required|exists:users,id',
-
+            'page' => 'nullable|integer',
+            'limit' => 'nullable|integer',
         ];
     }
 }

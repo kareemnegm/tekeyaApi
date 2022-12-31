@@ -24,6 +24,7 @@ class ProviderOrderRepository implements ProviderOrderInterface
 
         $q = OrderShop::where('shop_id', $shop_id)->with('order')->with('invoice')->withSum('orderItems', 'quantity');
 
+        $limit=isset($request['limit']) ? $request['limit'] : 10;
 
         if (!isset($request['order_type'])) {
             $shopOrder = $q->get();
@@ -40,11 +41,11 @@ class ProviderOrderRepository implements ProviderOrderInterface
 
             $shopOrder = $q->whereHas('deliveryType', function ($query) {
                 $query->where('order_shop_status', '=', 'rejected');
-            })->get();
+            })->paginate($limit);
         } elseif ($request['order_type'] == 'canceled') {
             $shopOrder = $q->whereHas('deliveryType', function ($query) {
                 $query->where('order_user_status', '=', 'canceled');
-            })->get();
+            })->paginate($limit);
         }
 
 
@@ -70,11 +71,13 @@ class ProviderOrderRepository implements ProviderOrderInterface
 
     public function OrderSearch($provider_id, $search)
     {
+        $limit=isset($request['limit']) ? $request['limit'] : 10;
 
         $order = OrderShop::where('shop_id', $provider_id)->whereHas('order', function ($query) use ($search) {
             $query->where('order_number', 'LIKE', '%' . $search . '%');
             $query->orderBy('created_at', 'desc');
-        })->get();
+        })->paginate($limit);
+        
         return  $order;
     }
 
@@ -132,29 +135,31 @@ class ProviderOrderRepository implements ProviderOrderInterface
     public function finaanceOrders($shop_id, $request)
     {
         $q = OrderShop::where('shop_id', $shop_id)->with('order')->with('invoice')->withSum('orderItems', 'quantity');
+        
+        $limit=isset($request['limit']) ? $request['limit'] : 10;
 
 
         if ($request['order_type'] == 'recent') {
 
-            $shopOrder = $q->get();
+            $shopOrder = $q->paginate($limit);
         } elseif ($request['order_type'] == 'pickup') {
 
-            $shopOrder = $q->where('model_type', 'App\Models\OrderPickup')->get();
+            $shopOrder = $q->where('model_type', 'App\Models\OrderPickup')->paginate($limit);
         } elseif ($request['order_type'] == 'delivery') {
 
-            $shopOrder = $q->where('model_type', 'App\Models\OrderShipment')->get();
+            $shopOrder = $q->where('model_type', 'App\Models\OrderShipment')->paginate($limit);
         } elseif ($request['order_type'] == 'canceled') {
 
-            $shopOrder = $q->where('model_type', 'App\Models\OrderShipment')->get();
+            $shopOrder = $q->where('model_type', 'App\Models\OrderShipment')->paginate($limit);
         } elseif ($request['order_type'] == 'rejected') {
 
             $shopOrder = $q->whereHas('deliveryType', function ($query) {
                 $query->where('order_shop_status', '=', 'rejected');
-            })->get();
+            })->paginate($limit);
         } elseif ($request['order_type'] == 'canceled') {
             $shopOrder = $q->whereHas('deliveryType', function ($query) {
                 $query->where('order_user_status', '=', 'canceled');
-            })->get();
+            })->paginate($limit);
         }
 
 
