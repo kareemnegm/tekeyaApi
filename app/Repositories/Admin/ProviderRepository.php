@@ -64,9 +64,9 @@ class ProviderRepository implements ProviderInterface
 
 
 
-    public function getShops()
+    public function getShops($request)
     {
-        $shops = ProviderShopDetails::orderBy('id','desc')->get();
+        $shops = ProviderShopDetails::orderBy('id','desc')->paginate($request->limit);
         return $shops;
     }
 

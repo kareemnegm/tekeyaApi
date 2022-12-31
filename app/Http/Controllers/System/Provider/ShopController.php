@@ -103,7 +103,7 @@ class ShopController extends Controller
     public function getShops(Request $request)
     {
 
-        return $this->paginateCollection(ShopDetailsResource::collection($this->ProviderRepository->getShops()), $request->limit, 'shops');
+        return $this->paginateCollection(ShopDetailsResource::collection($this->ProviderRepository->getShops($request)), $request->limit, 'shops');
     }
 
 

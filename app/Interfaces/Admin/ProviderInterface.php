@@ -10,7 +10,7 @@ interface ProviderInterface
     // public function createShopDetails($details);
     public function updateShopDetails($details, $id);
     public function getShopDetails($id);
-    public function getShops();
+    public function getShops($request);
     public function statusShop($data,$id);
     // public function getShopByCategoryId($id, $details);
     /**
