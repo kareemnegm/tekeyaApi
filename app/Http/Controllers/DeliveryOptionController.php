@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ListFormRequest;
 use App\Http\Resources\DeliveryOptionResource;
 use App\Models\DeliveryOption;
 use Illuminate\Http\Request;
@@ -14,9 +15,11 @@ class DeliveryOptionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(ListFormRequest $request)
     {
-        return $this->paginateCollection(DeliveryOptionResource::collection(DeliveryOption::get()), $request->limit, 'collection');
+        $limit=isset($request['limit']) ? $request['limit']:10;
+
+        return $this->paginateCollection(DeliveryOptionResource::collection(DeliveryOption::paginate($limit)), $request->limit, 'collection');
     }
 
     /**
