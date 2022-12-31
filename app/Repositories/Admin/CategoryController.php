@@ -4,6 +4,7 @@ namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryFormRequest;
+use App\Http\Requests\ListFormRequest;
 use App\Interfaces\CategoryInterface;
 use Illuminate\Http\Request;
 
@@ -42,7 +43,7 @@ class CategoryController extends Controller
      * @param Request $request
      * @return void
      */
-    public function index(Request $request)
+    public function index(ListFormRequest $request)
     {
         return $this->paginateCollection($this->CategoryRepository->getCategories($request), $request->limit, 'category');
     }

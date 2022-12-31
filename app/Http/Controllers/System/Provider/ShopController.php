@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\ProviderCreateFormRequest;
 use App\Http\Requests\Admin\ProviderShopFormRequest;
 use App\Http\Requests\Admin\ShopBranchFormRequest as AdminShopBranchFormRequest;
 use App\Http\Requests\Admin\UpdateShopDetailsFormRequest as AdminUpdateShopDetailsFormRequest;
+use App\Http\Requests\ListFormRequest;
 use App\Http\Requests\Provider\BranchIdFormRequest;
 use App\Http\Requests\System\ShopStatusFormRequest;
 use App\Http\Resources\Admin\ShopDetailsResource;
@@ -100,9 +101,8 @@ class ShopController extends Controller
 
 
 
-    public function getShops(Request $request)
+    public function getShops(ListFormRequest $request)
     {
-
         return $this->paginateCollection(ShopDetailsResource::collection($this->ProviderRepository->getShops($request)), $request->limit, 'shops');
     }
 

@@ -21,6 +21,7 @@ class ProductRepository  implements ProductInterface
     public function getAllAdminShopProduct($request, $shopID)
     {
 
+        $limit=$request->limit ? $request->limit :10;
 
         $q = Product::query();
 
@@ -38,12 +39,12 @@ class ProductRepository  implements ProductInterface
                 $request->sortBy = 'created_at';
             }
             if (isset($request->sort) && !empty($request->sort)) {
-                $collections = $q->orderBy($request->sortBy, $request->sort)->get();
+                $collections = $q->orderBy($request->sortBy, $request->sort)->paginate($limit);
             } else {
-                $collections = $q->orderBy($request->sortBy, 'desc')->get();
+                $collections = $q->orderBy($request->sortBy, 'desc')->paginate($limit);
             }
         } else {
-            $collections = $q->orderBy('order', 'ASC')->get();
+            $collections = $q->orderBy('order', 'ASC')->paginate($limit);
         }
 
 

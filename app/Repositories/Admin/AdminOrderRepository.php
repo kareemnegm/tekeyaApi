@@ -31,6 +31,8 @@ class AdminOrderRepository implements AdminOrderInterface
     public function finaanceOrders($shop_id, $request)
     {
         $q = OrderShop::with('order')->with('invoice')->withSum('orderItems', 'quantity');
+        
+        $limit=isset($request['limit']) ? $request['limit'] :10;
 
         if (isset($request['shop_id']) && !empty($request['shop_id'])) {
             $q->where('shop_id', $shop_id);
@@ -59,9 +61,9 @@ class AdminOrderRepository implements AdminOrderInterface
 
 
         if (isset($request['sort']) && !empty($request['sort'])) {
-            $shopOrder = $shopOrder->orderBy('id', $request['sort'])->get();
+            $shopOrder = $shopOrder->orderBy('id', $request['sort'])->paginate($limit);
         } else {
-            $shopOrder = $shopOrder->get();
+            $shopOrder = $shopOrder->paginate($limit);
         }
 
 

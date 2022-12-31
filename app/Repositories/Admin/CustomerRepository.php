@@ -20,16 +20,17 @@ class CustomerRepository implements CustomerInterface
 
          $q=User::query();
 
+         $limit=isset($request['limit']) ? $request['limit'] :10;
 
-         if($request['keyword']){
+         if(isset($request['keyword'])){
             $customerOrders=$q->Where(DB::raw("concat(first_name, ' ', last_name)"), 'LIKE', "%".$request['keyword']."%")
             ->orWhere('mobile', 'LIKE', '%'.$request['keyword'].'%')->  orderBy('id','DESC')
             ->withCount('orders')
-            ->get();
+            ->paginate($limit);
          }else{
             $customerOrders=$q->orderBy('id','DESC')
             ->withCount('orders')
-            ->get();
+            ->paginate($limit);
          }
        
         return  $customerOrders;
@@ -58,11 +59,11 @@ class CustomerRepository implements CustomerInterface
      */
     public function customersSearch($request)
     {
-        
-        $customerOrder=User::
-        Where(DB::raw("concat(first_name, ' ', last_name)"), 'LIKE', "%".$request['keyword']."%")
+        $limit=isset($request['limit']) ? $request['limit'] :10;
+
+        $customerOrder=User::where(DB::raw("concat(first_name, ' ', last_name)"), 'LIKE', "%".$request['keyword']."%")
 		->orWhere('mobile', 'LIKE', '%'.$request['keyword'].'%')
-        ->withCount('orders')->get();
+        ->withCount('orders')->paginate($limit);
         
         return $customerOrder;
 

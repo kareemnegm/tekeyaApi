@@ -83,33 +83,18 @@ class Controller extends BaseController
   */
 public function paginateCollection($items, $perPage ,$key , $options = [],$page = null)
 {
-    $key=$key?$key:'data';
-    $perPage=$perPage ? $perPage:10;
+ 
 
-	$page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-
-	$items = $items instanceof Collection ? $items : Collection::make($items);
-
-    $lap = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
-
-    return [
-        "status"=> 200,
-        "message"=>"success",
-        "data"=>[
-            "result"=>[
-        'current_page' => $lap->currentPage(),
-         $key => $lap ->values(),
-        'first_page_url' => $lap ->url(1),
-        'from' => $lap->firstItem(),
-        'last_page' => $lap->lastPage(),
-        'last_page_url' => $lap->url($lap->lastPage()),
-        'next_page_url' => $lap->nextPageUrl(),
-        'per_page' => $lap->perPage(),
-        'prev_page_url' => $lap->previousPageUrl(),
-        'to' => $lap->lastItem(),
-        'total' => $lap->total(),
-        ]
-        ]
-    ];
+      return $this->dataResponse([$key=>$items
+        ,'first_page_url' => $items->url(1),
+        'from' => $items->firstItem(),
+        'last_page' => $items->lastPage(),
+        'last_page_url' => $items->url($items->lastPage()),
+        'next_page_url' => $items->nextPageUrl(),
+        'per_page' => $items->perPage(),
+        'prev_page_url' => $items->previousPageUrl(),
+        'to' => $items->lastItem(),
+        'total' => $items->total(),]);
+  
 }
 }

@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests;
 
-use App\Http\Requests\BaseFormRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AdminShopCovrageIdRequest extends BaseFormRequest
+class ListFormRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,13 +20,12 @@ class AdminShopCovrageIdRequest extends BaseFormRequest
      * Get the validation rules that apply to the request.
      *
      * @return array
-     */ 
+     */
     public function rules()
     {
         return [
-            'shop_id' => 'required|exists:provider_shop_details,id',
-            'page'=>'integer',
-            'limit'=>'integer',
+            'page' => 'nullable|integer',
+            'limit' => 'nullable|integer',
         ];
     }
 }

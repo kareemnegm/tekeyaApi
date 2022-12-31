@@ -38,7 +38,7 @@ class DeliveryCoverageController extends Controller
     {
         $data=$request->validated();
 
-        return $this->paginateCollection(AdminDeliveryCovrageResource::collection($this->deliveryCoverageRepository->getAllDeliveryCoverage($data['shop_id'])), $request->limit, 'delivery_coverage');
+        return $this->paginateCollection(AdminDeliveryCovrageResource::collection($this->deliveryCoverageRepository->getAllDeliveryCoverage($data,$data['shop_id'])), $request->limit, 'delivery_coverage');
 
         return $this->dataResponse(['delivery_coverage' => AdminDeliveryCovrageResource::collection($this->deliveryCoverageRepository->getAllDeliveryCoverage($data['shop_id']))], 'success', 200);
     }

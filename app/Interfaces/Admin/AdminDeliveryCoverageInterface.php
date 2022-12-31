@@ -17,7 +17,7 @@ interface AdminDeliveryCoverageInterface
      * @param [type] $shop_id
      * @return void
      */
-    public function getAllDeliveryCoverage($shop_id);
+    public function getAllDeliveryCoverage($request,$shop_id);
     /**
      * Undocumented function
      *

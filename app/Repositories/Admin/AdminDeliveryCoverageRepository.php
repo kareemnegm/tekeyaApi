@@ -26,9 +26,11 @@ class AdminDeliveryCoverageRepository extends Controller implements AdminDeliver
      * @param [type] $shop_id
      * @return void
      */
-    public function getAllDeliveryCoverage($shop_id)
+    public function getAllDeliveryCoverage($request,$shop_id)
     {
-        $coverageAreas = deliveryCoverage::where('shop_id', $shop_id)->get();
+        $limit=isset($request->limit) ? $request->limit :10;
+
+        $coverageAreas = deliveryCoverage::where('shop_id', $shop_id)->paginate($limit);
         return $coverageAreas;
     }
 

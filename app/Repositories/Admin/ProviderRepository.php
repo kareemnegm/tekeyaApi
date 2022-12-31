@@ -66,7 +66,9 @@ class ProviderRepository implements ProviderInterface
 
     public function getShops($request)
     {
-        $shops = ProviderShopDetails::orderBy('id','desc')->paginate($request->limit);
+        $limit=$request->limit ? $request->limit :10;
+        
+        $shops = ProviderShopDetails::orderBy('id','desc')->paginate($limit);
         return $shops;
     }
 
