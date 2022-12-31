@@ -34,6 +34,8 @@ class ProductFilterFormRequest extends BaseFormRequest
                 'filter' => 'nullable|in:category,shop',
                 'shop_id' => 'required_if:filter,==,shop',
                 'category_id' => 'required_if:filter,==,category',
+                'limit' =>'integer',
+                'page' =>'integer',
             ];
         }
 
@@ -44,6 +46,8 @@ class ProductFilterFormRequest extends BaseFormRequest
             'filter' => 'nullable|in:category,shop',
             'shop_id' => 'required_if:filter,==,shop',
             'category_id' => 'required_if:filter,==,category',
+            'limit' =>'integer',
+            'page' =>'integer',
         ];
     }
 }

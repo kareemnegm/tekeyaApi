@@ -43,6 +43,9 @@ class OrderController extends Controller
     public function ShopOrders(OrdersFormRequest $request)
     {
 
+        $limit=isset($request['limit']) ? $request['limit'] :10;
+
+
         $request->validated();
 
         $q = OrderShop::with('order')->with('invoice')->withSum('orderItems', 'quantity');
@@ -71,9 +74,9 @@ class OrderController extends Controller
             });
         }
         if (isset($request['sort']) && !empty($request['sort'])) {
-            $shopOrder = $shopOrder->orderBy('id', $request['sort'])->get();
+            $shopOrder = $shopOrder->orderBy('id', $request['sort'])->paginate($limit);
         } else {
-            $shopOrder = $shopOrder->get();
+            $shopOrder = $shopOrder->paginate($limit);
         }
 
         return $this->paginateCollection(OrderResource::collection($shopOrder), $request->limit, 'orders_shop_list');

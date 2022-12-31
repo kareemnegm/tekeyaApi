@@ -27,7 +27,10 @@ class OrdersFormRequest extends BaseFormRequest
         return [
             'order_type' => 'nullable|in:recent,pickup,delivery,rejected,canceled',
             'sort' => 'nullable|in:asc,desc',
-            'shop_id' => 'nullable|exists:provider_shop_details,id'
+            'shop_id' => 'nullable|exists:provider_shop_details,id',
+            'limit' => 'nullable|integer',
+            'page' => 'nullable|integer'
+
         ];
     }
 }

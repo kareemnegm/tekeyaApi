@@ -26,7 +26,7 @@ class CategoryRepository implements CategoryInterface
             if ($request->page) {
                 $categories = $q->orderBy('id','DESC')->whereNull('category_id')->paginate($limit);
             } else {
-                $categories = $q->orderBy('id','DESC')->whereNull('category_id')->get();
+                $categories = $q->orderBy('id','DESC')->whereNull('category_id')->paginate($limit);
             }
 
         return $categories;
@@ -42,6 +42,7 @@ class CategoryRepository implements CategoryInterface
     public function getSubCategories($request){
         // $limit=$request->limit ?$request->limit:10;
 
+        $limit=$request->limit ?$request->limit:10;
 
         $mainCategory = Category::findOrFail($request->category_id);
         $q=$mainCategory->subs();
@@ -49,7 +50,7 @@ class CategoryRepository implements CategoryInterface
             // if ($request->page) {
             //     $categories = $q->orderBy('id','DESC')->paginate($limit);
             // } else {
-                $categories = $q->orderBy('id','DESC')->get();
+        $categories = $q->orderBy('id','DESC')->paginate($limit);
             // }
 
     return $categories;
@@ -103,7 +104,7 @@ class CategoryRepository implements CategoryInterface
             if ($request->page) {
                 $shops = $q->orderBy('id','DESC')->paginate($limit);
             } else {
-                $shops = $q->orderBy('id','DESC')->get();
+                $shops = $q->orderBy('id','DESC')->paginate($limit);
             }
 
         return $shops;

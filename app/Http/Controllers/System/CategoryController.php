@@ -54,7 +54,8 @@ class CategoryController extends Controller
      * @return void
      */
     public function index(ListFormRequest $request)
-    {
+    {       
+
         return $this->paginateCollection($this->CategoryRepository->getCategories($request), $request->limit, 'category');
     }
 

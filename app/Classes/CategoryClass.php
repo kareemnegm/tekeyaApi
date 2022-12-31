@@ -61,12 +61,14 @@ class CategoryClass implements CategoryInterface
      */
     public function getCategories($details)
     {
+        $limit=isset($details['limit']) ? $details['limit'] :10;
+
         $q=Category::query();
 
        if($details['keyword']){
-       $categoies=$q->where('name', 'LIKE', '%' . $details['keyword'] . '%')->with('children')->get();
+       $categoies=$q->where('name', 'LIKE', '%' . $details['keyword'] . '%')->with('children')->paginate($limit);
        }else{
-        $categoies=$q->where('category_id', null)->with('children')->get();
+        $categoies=$q->where('category_id', null)->with('children')->paginate($limit);
        }
        
         return CategoryResource::collection($categoies);
@@ -80,13 +82,14 @@ class CategoryClass implements CategoryInterface
      */
     public function getAllCategories($details)
     {
-        
+        $limit=isset($details['limit']) ? $details['limit'] :10;
+
         $q=Category::query();
 
        if($details['keyword']){
-       $categoies=$q->where('name', 'LIKE', '%' . $details['keyword'] . '%')->get();
+       $categoies=$q->where('name', 'LIKE', '%' . $details['keyword'] . '%')->paginate($limit);
        }else{
-        $categoies=$q->get();
+        $categoies=$q->paginate($limit);
        }
 
         return AllCategoryResource::collection($categoies);

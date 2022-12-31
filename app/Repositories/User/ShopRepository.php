@@ -74,6 +74,7 @@ class ShopRepository extends Controller implements ShopInrerface
     public function getProductsShop($request)
     {
 
+        $limit=isset($request['limit']) ? $request['limit']:10;
 
         $shop = ProviderShopDetails::findOrFail($request->shop_id);
         $q = $shop->products()->where('is_published',1);
@@ -102,7 +103,7 @@ class ShopRepository extends Controller implements ShopInrerface
             $q->productByDistance($request['latitude'], $request['longitude']);
         }
 
-        $products = $q->orderBy('order', 'ASC')->get();
+        $products = $q->orderBy('order', 'ASC')->paginate($limit);
 
 
         return $products;

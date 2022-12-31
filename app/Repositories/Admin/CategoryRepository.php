@@ -71,6 +71,7 @@ class CategoryRepository implements CategoryInterface
         $categoies=$q->where('category_id', null)->with('children')->paginate($limit);
        }
 
+       dd($categoies);
         return CategoryResource::collection($categoies);
     }
 
@@ -82,6 +83,7 @@ class CategoryRepository implements CategoryInterface
      */
     public function getAllCategories($details)
     {
+
         $limit=isset($details['limit']) ? $details['limit'] :10;
 
         $q=Category::query();

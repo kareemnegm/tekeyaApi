@@ -46,6 +46,8 @@ class ProductRepository implements ProductInterface
 
         $product = Product::findOrFail($productId);
 
+        $limit=isset($request['limit']) ? $request['limit']:10;
+
         $relatedProducts = Product::where('id', '!=', $product->id)->where('is_published', 1)->where('category_id', $product->category_id)->where('shop_id', $product->shop_id);
         if (isset($request['filter']) && $request['filter'] == 'category') {
             $relatedProducts->where('category_id', $request['category_id']);
@@ -68,7 +70,7 @@ class ProductRepository implements ProductInterface
 
             $relatedProducts->productByDistance($request['latitude'], $request['longitude']);
         }
-        $collections = $relatedProducts->get();
+        $collections = $relatedProducts->paginate($limit);
 
         return $collections;
     }
@@ -80,6 +82,8 @@ class ProductRepository implements ProductInterface
      */
     public function similarProducts($productId, $request)
     {
+
+        $limit=isset($request['limit']) ? $request['limit']:10;
 
         $product = Product::findOrFail($productId);
         $similarProducts = Product::where('category_id', $product->category_id)->where('is_published', 1)->where('shop_id', '!=', $product->shop_id);
@@ -106,7 +110,7 @@ class ProductRepository implements ProductInterface
 
             $similarProducts->productByDistance($request['latitude'], $request['longitude']);
         }
-        $collections = $similarProducts->get();
+        $collections = $similarProducts->paginate($limit);
 
         return $collections;
     }

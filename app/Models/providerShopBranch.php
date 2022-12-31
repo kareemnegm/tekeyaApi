@@ -85,6 +85,7 @@ class providerShopBranch extends Model
     {
         $distance = 30;
         $constant = $unit == "km" ? 6371 : 3959;
+        $limit=isset(request()->limit) ? request()->limit :10;
 
         $haversine = "(
             6371 * acos(
@@ -98,7 +99,7 @@ class providerShopBranch extends Model
                 $query->whereHas('products');
             })->whereIn('shop_id', $shopIDs)->with('shop')->select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"),'latitude','longitude')
                 ->having("distance", "<=", $distance)
-                ->orderby("distance", "asc")->get();
+                ->orderby("distance", "asc")->paginate($limit);
         
 
            
@@ -111,6 +112,7 @@ class providerShopBranch extends Model
         
         $distance = 30;
         $constant = $unit == "km" ? 6371 : 3959;
+        $limit=isset(request()->limit) ? request()->limit :10;
 
         $haversine = "(
             6371 * acos(
@@ -127,7 +129,7 @@ class providerShopBranch extends Model
             })->
             whereIn('shop_id', $shopIDs)->select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"),'latitude','longitude')
                 ->having("distance", "<=", $distance)
-                ->orderby("distance", "asc")->get();
+                ->orderby("distance", "asc")->paginate($limit);
         } else {
             return providerShopBranch::
             with('shop')->whereHas('shop', function ($query) {
@@ -135,7 +137,7 @@ class providerShopBranch extends Model
             })->
             select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"), 'latitude', 'longitude')
                 ->having("distance", "<=", $distance)
-                ->orderby("distance", "asc")->get();
+                ->orderby("distance", "asc")->paginate($limit);
         }
 
             //  $mapCollection = $shopBranch->map( function ( $value )
@@ -156,6 +158,7 @@ class providerShopBranch extends Model
     {
         $distance = 30;
         $constant = $unit == "km" ? 6371 : 3959;
+        $limit=isset(request()->limit) ? request()->limit :10;
 
         $haversine = "(
             6371 * acos(
@@ -170,12 +173,12 @@ class providerShopBranch extends Model
             with('shop')->whereHas('shop', function ($query) {
                 $query->whereHas('products');
             })->whereIn('shop_id', $shopIDs)->select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"),'latitude','longitude')
-                ->orderby("distance", "asc")->get();
+                ->orderby("distance", "asc")->paginate($limit);
         } else {
             return  providerShopBranch::with('shop')->whereHas('shop', function ($query) {
                 $query->whereHas('products');
             })->select(DB::raw("$haversine AS distance, id as id , name as name,shop_id as shop_id"),'latitude','longitude')
-                ->orderby("distance", "asc")->get();
+                ->orderby("distance", "asc")->paginate($limit);
         }
     }
 
