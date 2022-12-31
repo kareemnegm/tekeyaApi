@@ -372,6 +372,8 @@ class OrderRepository extends Controller implements OrderInterface
     public function myOrderList($request)
     {
         $user = Auth::user();
+        
+        $limit=isset($request['limit']) ? $request['limit']:10;
 
         $limit = $request->limit ? $request->limit : 10;
 
@@ -379,7 +381,7 @@ class OrderRepository extends Controller implements OrderInterface
         // if ($request->page) {
         //     $orders = $q->orderBy('date_order_placed', 'DESC')->paginate($limit);
         // } else {
-        $orders = $q->orderBy('date_order_placed', 'DESC')->get();
+        $orders = $q->orderBy('date_order_placed', 'DESC')->paginate($limit);
         // }
 
         return $orders;
