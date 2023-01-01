@@ -16,11 +16,12 @@ class CollectionRepository implements CollectionInterface
      */
     public function getAllShopCollection($request)
     {
+        $limit=isset($request['limit']) ? $request['limit']:10;
 
         // $limit = $request->limit ? $request->limit : 10;
 
         $q = Collection::query();
-        
+
         $limit=isset($request['limit']) ? $request['limit'] : 10;
 
         $shopId = auth('provider')->user()->providerShopDetails->id;

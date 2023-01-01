@@ -24,7 +24,7 @@ class ProductRepository implements ProductInterface
     {
 
         $q = Product::query();
-        
+
         $limit=isset($request['limit']) ? $request['limit'] : 10;
 
         $q->where('shop_id', auth('provider')->user()->providerShopDetails->id);
@@ -266,7 +266,9 @@ class ProductRepository implements ProductInterface
     public function productNotInCollectionSearch($request)
     {
 
-        $prdoucts = Product::orderBy('order', 'ASC')->where('name', 'like', '%' . $request['search'] . '%')->where('collection_id', null)->where('shop_id', $request['shop_id'])->get();
+        $limit=isset($request['limit']) ? $request['limit']:10;
+
+        $prdoucts = Product::orderBy('order', 'ASC')->where('name', 'like', '%' . $request['search'] . '%')->where('collection_id', null)->where('shop_id', $request['shop_id'])->paginate($limit);
         return $prdoucts;
     }
     /**
